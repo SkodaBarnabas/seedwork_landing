@@ -5,37 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seedwork — Validate first. Build what works.</title>
   <meta name="description" content="Seedwork is a Danish venture studio that runs ideas in parallel, validates them against real markets, and builds only what survives.">
-  <meta name="theme-color" content="#050A18">
+  <meta name="theme-color" content="#0D0D0F">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='28' font-size='28'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #050A18;
-      --bg-surface: #0A1128;
-      --accent: #4B7BFF;
-      --text: #D8DEE9;
-      --text-dim: #5E6B82;
-      --border: rgba(255, 255, 255, 0.07);
+      --bg: #0D0D0F;
+      --bg-2: #1A1A1E;
+      --bg-3: #222226;
+      --text: #FFFFFF;
+      --text-2: #E0E0E4;
+      --text-3: #9A9AA0;
+      --border: rgba(255, 255, 255, 0.08);
+      --blue: #4285F4;
+      --purple: #A855F7;
+      --pink: #D946EF;
       --green: #34D399;
       --amber: #FBBF24;
-      --mono: 'Space Mono', 'Courier New', monospace;
-      --sans: 'General Sans', -apple-system, system-ui, sans-serif;
-      --max-w: 1060px;
+      --grad: linear-gradient(135deg, #4285F4, #7B61FF, #D946EF);
+      --font: 'Inter', -apple-system, system-ui, sans-serif;
+      --max-w: 1080px;
       --pad: clamp(64px, 10vw, 120px);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-pill: 100px;
     }
 
     html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 
     body {
-      font-family: var(--sans);
+      font-family: var(--font);
       font-size: 16px;
+      font-weight: 400;
       line-height: 1.7;
-      color: var(--text);
+      color: var(--text-2);
       background: var(--bg);
       -webkit-font-smoothing: antialiased;
     }
@@ -49,12 +56,22 @@
       padding: 0 24px;
     }
 
+    /* ---- Gradient text utility ---- */
+    .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
     /* ---- Nav ---- */
     .nav {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(5, 10, 24, 0.92);
+      background: rgba(13, 13, 15, 0.8);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
 
@@ -62,49 +79,79 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 56px;
+      height: 64px;
       max-width: var(--max-w);
       margin: 0 auto;
       padding: 0 24px;
     }
 
-    .nav-brand {
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-brand img {
-      height: 22px;
-      width: auto;
-      display: block;
-    }
+    .nav-brand { display: flex; align-items: center; }
+    .nav-brand img { height: 28px; width: auto; display: block; }
 
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 32px;
     }
 
     .nav-right a {
-      font-size: 13px;
-      color: var(--text-dim);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-3);
       transition: color 0.2s;
     }
 
     .nav-right a:hover { color: var(--text); }
 
-    .nav-cta {
-      font-family: var(--mono);
-      font-size: 12px;
+    .nav-right a.nav-cta,
+    .nav-right a.nav-cta:hover {
+      font-size: 14px;
       font-weight: 700;
-      padding: 8px 16px;
-      background: var(--accent);
-      color: #fff;
-      border-radius: 4px;
+      padding: 10px 22px;
+      background: #FFFFFF;
+      color: #000000;
+      border-radius: var(--radius-pill);
       transition: opacity 0.2s;
     }
 
-    .nav-cta:hover { opacity: 0.85; }
+    .nav-right a.nav-cta:hover { opacity: 0.85; }
+
+    /* ---- Buttons ---- */
+    .btn {
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-p {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .btn-p:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-g {
+      background: var(--bg-2);
+      color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+
+    .btn-g:hover {
+      background: var(--bg-3);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
 
     /* ---- Hero ---- */
     .hero {
@@ -113,100 +160,113 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
       padding: 120px 24px 80px;
       overflow: hidden;
     }
 
-    .hero-grid {
+    .hero-bg {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background-image:
-        linear-gradient(rgba(75, 123, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(75, 123, 255, 0.02) 1px, transparent 1px);
-      background-size: 80px 80px;
+      background: url('hero.jpg') center/cover no-repeat;
     }
 
-    .hero-grid::after {
+    .hero-bg::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, transparent 20%, var(--bg) 100%);
+      background: rgba(13, 13, 15, 0.7);
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, var(--bg) 100%);
+    }
+
+    /* Soft gradient orbs */
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-glow::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(66, 133, 244, 0.12), transparent 70%);
+      top: 10%;
+      left: 15%;
+      filter: blur(60px);
+      animation: drift-a 15s ease-in-out infinite alternate;
+    }
+
+    .hero-glow::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(217, 70, 239, 0.08), transparent 70%);
+      bottom: 10%;
+      right: 10%;
+      filter: blur(60px);
+      animation: drift-b 18s ease-in-out infinite alternate;
     }
 
     .hero-body {
       position: relative;
       z-index: 1;
-      max-width: 700px;
+      max-width: 720px;
     }
 
     .hero h1 {
-      font-family: var(--mono);
+      font-size: clamp(36px, 7vw, 64px);
       font-weight: 700;
-      font-size: clamp(32px, 6vw, 56px);
-      line-height: 1.15;
-      letter-spacing: -1px;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      color: var(--text);
       margin-bottom: 24px;
     }
 
     .hero-sub {
-      font-size: 17px;
-      color: var(--text-dim);
+      font-size: clamp(17px, 2.5vw, 20px);
+      color: var(--text-3);
       max-width: 520px;
-      margin-bottom: 40px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
     }
 
     .hero-btns {
       display: flex;
-      gap: 12px;
+      gap: 14px;
+      justify-content: center;
       flex-wrap: wrap;
     }
-
-    .btn {
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 700;
-      padding: 12px 24px;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .btn-p {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .btn-g {
-      background: transparent;
-      color: var(--text-dim);
-      border: 1px solid var(--border);
-    }
-
-    .btn:hover { opacity: 0.8; }
 
     .scroll-arrow {
       position: absolute;
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%);
-      color: var(--text-dim);
+      color: var(--text-3);
       opacity: 0.3;
     }
 
-    /* ---- Section labels ---- */
+    /* ---- Section label ---- */
     .label {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: var(--text-dim);
-      margin-bottom: 20px;
-      display: block;
+      margin-bottom: 16px;
+      display: inline-block;
     }
 
     /* ---- Intro ---- */
@@ -216,67 +276,143 @@
 
     .intro-inner {
       max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
     }
 
     .intro h2 {
-      font-family: var(--mono);
+      font-size: clamp(26px, 4.5vw, 40px);
       font-weight: 700;
-      font-size: clamp(22px, 3.5vw, 32px);
-      line-height: 1.25;
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      color: var(--text);
       margin-bottom: 24px;
-      letter-spacing: -0.5px;
     }
 
     .intro p {
-      color: var(--text-dim);
+      color: var(--text-3);
       margin-bottom: 16px;
+      font-size: 17px;
     }
 
     .stats {
       display: flex;
-      gap: 40px;
-      margin-top: 40px;
-      padding-top: 28px;
-      border-top: 1px solid var(--border);
+      justify-content: center;
+      gap: 48px;
+      margin-top: 48px;
     }
 
     .stat-val {
-      font-family: var(--mono);
+      font-size: 36px;
       font-weight: 700;
-      font-size: 28px;
       color: var(--text);
       display: block;
       line-height: 1;
     }
 
     .stat-lbl {
-      font-size: 12px;
-      color: var(--text-dim);
-      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-3);
+      margin-top: 8px;
       display: block;
+    }
+
+    /* ---- Founder ---- */
+    .founder {
+      padding: var(--pad) 0;
+    }
+
+    .founder-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .founder-img {
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .founder-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .founder-role {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .founder-name {
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .founder-bio {
+      color: var(--text-3);
+      margin-bottom: 12px;
+      font-size: 17px;
+    }
+
+    .founder-creds {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .founder-creds li {
+      font-size: 15px;
+      color: var(--text-3);
+      padding: 6px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .founder-creds li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 14px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--grad);
     }
 
     /* ---- Ecosystem ---- */
     .eco {
       padding: var(--pad) 0;
-      background: var(--bg-surface);
     }
 
     .eco-head {
-      margin-bottom: 40px;
+      text-align: center;
+      margin-bottom: 48px;
     }
 
     .eco-head h2 {
-      font-family: var(--mono);
+      font-size: clamp(26px, 4.5vw, 40px);
       font-weight: 700;
-      font-size: clamp(22px, 3.5vw, 32px);
-      letter-spacing: -0.5px;
+      letter-spacing: -0.8px;
+      color: var(--text);
       margin-bottom: 12px;
     }
 
     .eco-head p {
-      color: var(--text-dim);
-      max-width: 480px;
+      color: var(--text-3);
+      max-width: 500px;
+      margin: 0 auto;
+      font-size: 17px;
     }
 
     .cards {
@@ -286,15 +422,16 @@
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--bg-2);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 28px;
-      transition: border-color 0.2s;
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: border-color 0.25s ease, background 0.25s ease;
     }
 
     .card:hover {
       border-color: rgba(255, 255, 255, 0.14);
+      background: var(--bg-3);
     }
 
     .card-head {
@@ -302,166 +439,195 @@
       align-items: baseline;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       flex-wrap: wrap;
     }
 
     .card-name {
-      font-family: var(--mono);
+      font-size: 20px;
       font-weight: 700;
-      font-size: 18px;
+      color: var(--text);
     }
 
     .card-status {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
     }
 
-    .s-building { color: var(--green); }
-    .s-validating { color: var(--amber); }
+    .s-building {
+      color: var(--green);
+      background: rgba(52, 211, 153, 0.1);
+    }
+
+    .s-validating {
+      color: var(--amber);
+      background: rgba(251, 191, 36, 0.1);
+    }
+
+    .s-idea {
+      color: var(--text-3);
+      background: rgba(255, 255, 255, 0.06);
+    }
 
     .card-cvr {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-dim);
-      opacity: 0.5;
+      font-size: 12px;
+      color: var(--text-3);
     }
 
     .card-tagline {
-      font-size: 15px;
-      color: var(--text-dim);
+      font-size: 16px;
+      color: var(--text-3);
       font-style: italic;
       margin-bottom: 16px;
     }
 
     .card-desc {
-      font-size: 14px;
-      color: var(--text-dim);
+      font-size: 15px;
+      color: var(--text-3);
       line-height: 1.7;
     }
 
     .card-list {
-      margin-top: 14px;
+      margin-top: 16px;
     }
 
     .card-list li {
-      font-size: 13px;
-      color: var(--text-dim);
+      font-size: 14px;
+      color: var(--text-3);
       line-height: 1.6;
-      padding: 4px 0;
-      padding-left: 14px;
+      padding: 4px 0 4px 20px;
       position: relative;
     }
 
     .card-list li::before {
-      content: '—';
+      content: '';
       position: absolute;
       left: 0;
-      color: var(--text-dim);
-      opacity: 0.3;
+      top: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--grad);
     }
 
     .card-tags {
-      margin-top: 18px;
-      padding-top: 14px;
+      margin-top: 20px;
+      padding-top: 16px;
       border-top: 1px solid var(--border);
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-dim);
-      opacity: 0.5;
-      letter-spacing: 0.5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    /* Sub-ventures inside BudGruppen */
+    .tag {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-2);
+    }
+
+    /* Sub-ventures */
     .subs {
-      margin-top: 18px;
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
-      gap: 1px;
+      gap: 12px;
     }
 
     .sub {
-      padding: 14px 0;
-      border-top: 1px solid var(--border);
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
     }
 
     .sub-name {
-      font-family: var(--mono);
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 700;
-      margin-bottom: 4px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .sub-name a,
+    a.card-name {
+      transition: opacity 0.2s;
+    }
+
+    .sub-name a:hover,
+    a.card-name:hover {
+      opacity: 0.7;
     }
 
     .sub-desc {
-      font-size: 13px;
-      color: var(--text-dim);
+      font-size: 14px;
+      color: var(--text-3);
       line-height: 1.6;
     }
 
     /* ---- Footer ---- */
     footer {
       border-top: 1px solid var(--border);
-      padding: 36px 0;
+      padding: 40px 0;
     }
 
     .footer-inner {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      gap: 24px;
+      gap: 32px;
     }
 
     .footer-brand img {
-      height: 18px;
+      height: 22px;
       width: auto;
       display: block;
-      opacity: 0.7;
+      opacity: 0.6;
     }
 
     .footer-brand small {
       display: block;
-      font-weight: 400;
-      font-family: var(--sans);
-      color: var(--text-dim);
-      font-size: 13px;
+      font-size: 14px;
+      color: var(--text-3);
       margin-top: 8px;
     }
 
     .footer-links {
       display: flex;
-      gap: 40px;
+      gap: 48px;
     }
 
     .footer-col h4 {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: var(--text-dim);
-      margin-bottom: 12px;
+      color: var(--text-3);
+      margin-bottom: 14px;
     }
 
     .footer-col a {
       display: block;
-      font-size: 13px;
-      color: var(--text-dim);
-      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--text-3);
+      margin-bottom: 10px;
       transition: color 0.2s;
     }
 
     .footer-col a:hover { color: var(--text); }
 
     .footer-bottom {
-      margin-top: 28px;
+      margin-top: 32px;
       padding-top: 20px;
       border-top: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--text-dim);
-      opacity: 0.4;
+      font-size: 13px;
+      color: var(--text-3);
+      opacity: 0.5;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -469,13 +635,13 @@
     }
 
     .footer-bottom a { color: inherit; }
-    .footer-bottom a:hover { opacity: 1; }
+    .footer-bottom a:hover { color: var(--text); opacity: 1; }
 
     /* ---- Fade in ---- */
     .fi {
       opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
     .fi.v {
@@ -483,15 +649,26 @@
       transform: translateY(0);
     }
 
-    /* Hero elements animate on load */
-    .hero h1 { animation: up 0.6s ease both 0.05s; }
-    .hero-sub { animation: up 0.6s ease both 0.15s; }
-    .hero-btns { animation: up 0.6s ease both 0.25s; }
+    .fi-stagger > .fi:nth-child(1) { transition-delay: 0s; }
+    .fi-stagger > .fi:nth-child(2) { transition-delay: 0.08s; }
+    .fi-stagger > .fi:nth-child(3) { transition-delay: 0.16s; }
+
+    .hero h1 { animation: up 0.7s ease both 0.05s; }
+    .hero-sub { animation: up 0.7s ease both 0.15s; }
+    .hero-btns { animation: up 0.7s ease both 0.25s; }
 
     @media (prefers-reduced-motion: no-preference) {
       @keyframes up {
-        from { opacity: 0; transform: translateY(16px); }
+        from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes drift-a {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(40px, -30px); }
+      }
+      @keyframes drift-b {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(-30px, 20px); }
       }
     }
 
@@ -499,6 +676,7 @@
       html { scroll-behavior: auto; }
       .fi { opacity: 1; transform: none; transition: none; }
       .hero h1, .hero-sub, .hero-btns { animation: none; opacity: 1; }
+      .hero-glow::before, .hero-glow::after { animation: none; }
     }
 
     /* ---- Responsive ---- */
@@ -508,20 +686,16 @@
         grid-template-columns: 1fr 1fr;
         gap: 16px;
       }
-
-      .card-wide {
-        grid-column: 1 / -1;
+      .card-wide { grid-column: 1 / -1; }
+      .founder-grid {
+        grid-template-columns: 1fr 1.3fr;
+        gap: 56px;
       }
     }
 
     @media (max-width: 767px) {
       .nav-links-desktop { display: none; }
-
-      .stats {
-        flex-direction: column;
-        gap: 16px;
-      }
-
+      .stats { flex-direction: column; gap: 24px; }
       .footer-links { gap: 32px; }
     }
   </style>
@@ -542,9 +716,10 @@
   <main>
 
     <section class="hero" id="hero">
-      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-glow" aria-hidden="true"></div>
       <div class="hero-body">
-        <h1>We validate ideas<br>before we build them</h1>
+        <h1>We <span class="grad-text">validate</span> ideas before we build them</h1>
         <p class="hero-sub">Seedwork is a Danish venture studio. We run ideas in parallel, test them against real markets, and build only what survives.</p>
         <div class="hero-btns">
           <a href="#ecosystem" class="btn btn-p">Explore the ecosystem</a>
@@ -561,8 +736,8 @@
     <section class="intro" id="intro">
       <div class="wrap">
         <div class="intro-inner fi">
-          <span class="label">Philosophy</span>
-          <h2>Verify demand.<br>Then engineer the solution.</h2>
+          <span class="label grad-text">Philosophy</span>
+          <h2>Verify demand. Then engineer the solution.</h2>
           <p>Most startups fail because they build before they validate. We don't. Seedwork runs multiple ideas in parallel, using real signals — revenue, signups, unit economics — to decide what lives and what dies.</p>
           <p>If an idea survives validation, we build it properly. If it doesn't, we kill it before it costs real money. No sunk-cost fallacies. No vanity metrics. Just disciplined signal-reading from an engineering-first team.</p>
           <div class="stats">
@@ -583,35 +758,40 @@
       </div>
     </section>
 
+    <section class="founder" id="founder">
+      <div class="wrap">
+        <div class="founder-grid fi">
+          <div class="founder-img">
+            <img src="pfp.png" alt="Founder portrait">
+          </div>
+          <div>
+            <div class="founder-role grad-text">Founder &amp; CEO</div>
+            <h2 class="founder-name">[Founder Name]</h2>
+            <p class="founder-bio">Electrical engineering student building Seedwork on a simple conviction: verify before you build. Every venture in the ecosystem started as a hypothesis tested against real demand before a single line of production code was written.</p>
+            <p class="founder-bio">Based in Denmark. Running multiple ventures in parallel while finishing a degree — because the best way to learn engineering is to ship things that work.</p>
+            <ul class="founder-creds">
+              <li>Electrical engineering, SDU</li>
+              <li>Founded BudGruppen (CVR 46232194)</li>
+              <li>Building across food tech, EdTech, and AI safety</li>
+              <li>Based in Sønderborg, Denmark</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="eco" id="ecosystem">
       <div class="wrap">
         <div class="eco-head fi">
-          <span class="label">Ecosystem</span>
+          <span class="label grad-text">Ecosystem</span>
           <h2>What we're building</h2>
           <p>Three ventures at different stages. Each targeting a different inefficiency. All validated in parallel.</p>
         </div>
-        <div class="cards">
+        <div class="cards fi-stagger">
 
           <div class="card fi">
             <div class="card-head">
-              <span class="card-name">Core1000</span>
-              <span class="card-status s-validating">Validating</span>
-            </div>
-            <p class="card-tagline">Learn 1,000 words. Understand 80% of everyday conversation.</p>
-            <p class="card-desc">Language learning built on corpus linguistics, not gamification. Teaches the highest-frequency words in strict order, paired with 40 reusable sentence templates and driven by FSRS spaced repetition. A coverage meter shows one number: the percentage of real conversation you now understand.</p>
-            <ul class="card-list">
-              <li>Templates first, words second — patterns generate thousands of natural exercises</li>
-              <li>Four-stage mastery: Introduction, Recognition, Recall, Production</li>
-              <li>Intelligent error detection with animated corrections for word order, negation, gender</li>
-              <li>Movie and series courses for contextual vocabulary beyond the core</li>
-              <li>Launching in Danish. Next: Spanish, English, Portuguese, French, Indonesian</li>
-            </ul>
-            <div class="card-tags">Language Learning · SaaS · EdTech</div>
-          </div>
-
-          <div class="card fi">
-            <div class="card-head">
-              <span class="card-name">Grain</span>
+              <a href="https://getgrain.site" target="_blank" rel="noopener" class="card-name">Grain ↗</a>
               <span class="card-status s-validating">Validating</span>
             </div>
             <p class="card-tagline">See what's real.</p>
@@ -624,26 +804,48 @@
               <li>Detection data trains proprietary models, feeds API and enterprise licensing</li>
               <li>Chrome extension MVP in development, traction via waitlist</li>
             </ul>
-            <div class="card-tags">AI Safety · Browser Extension · Consumer</div>
+            <div class="card-tags">
+              <span class="tag">AI Safety</span>
+              <span class="tag">Browser Extension</span>
+              <span class="tag">Consumer</span>
+            </div>
+          </div>
+
+          <div class="card fi">
+            <div class="card-head">
+              <span class="card-name">Core1000</span>
+              <span class="card-status s-idea">Idea</span>
+            </div>
+            <p class="card-tagline">Learn 1,000 words. Understand 80% of everyday conversation.</p>
+            <p class="card-desc">Language learning built on corpus linguistics, not gamification. Teaches the highest-frequency words in strict order, paired with 40 reusable sentence templates and driven by FSRS spaced repetition. A coverage meter shows one number: the percentage of real conversation you now understand.</p>
+            <ul class="card-list">
+              <li>Templates first, words second — patterns generate thousands of natural exercises</li>
+              <li>Four-stage mastery: Introduction, Recognition, Recall, Production</li>
+              <li>Intelligent error detection with animated corrections for word order, negation, gender</li>
+              <li>Movie and series courses for contextual vocabulary beyond the core</li>
+              <li>Launching in Danish. Next: Spanish, English, Portuguese, French, Indonesian</li>
+            </ul>
+            <div class="card-tags">
+              <span class="tag">Language Learning</span>
+              <span class="tag">SaaS</span>
+              <span class="tag">EdTech</span>
+            </div>
           </div>
 
           <div class="card card-wide fi">
             <div class="card-head">
-              <div>
-                <span class="card-name">BudGruppen</span>
-                <span class="card-cvr"> · CVR 46232194</span>
-              </div>
+              <span class="card-name">BudGruppen</span>
               <span class="card-status s-building">Building</span>
             </div>
             <p class="card-tagline">Three ventures. One thesis: cut the middleman.</p>
             <p class="card-desc">A group of lean, product-focused businesses built out of Sønderborg, Denmark. Each targets a different inefficiency in how local economies move money, food, and attention.</p>
             <div class="subs">
               <div class="sub">
-                <div class="sub-name">BudMedia</div>
+                <div class="sub-name"><a href="https://budmedia.dk" target="_blank" rel="noopener">BudMedia ↗</a></div>
                 <p class="sub-desc">Free branded pizza boxes for restaurants, funded by local advertising printed on the surface. Sits on a kitchen table for 30 minutes, reaches 2.8 people per box. Can't be blocked or skipped.</p>
               </div>
               <div class="sub">
-                <div class="sub-name">MadBud</div>
+                <div class="sub-name"><a href="https://madbud.dk" target="_blank" rel="noopener">MadBud ↗</a></div>
                 <p class="sub-desc">Food delivery where the 15% commission goes back to the customer as an automatic discount. Restaurants use own drivers. 7 DKK platform fee only. Over 100 DKK saved per typical order vs. Wolt or Just Eat.</p>
               </div>
               <div class="sub">
@@ -651,7 +853,11 @@
                 <p class="sub-desc">Early-stage exploration into vending and snack distribution. The physical retail layer of the BudGruppen ecosystem.</p>
               </div>
             </div>
-            <div class="card-tags">Delivery · AdTech · Local Commerce</div>
+            <div class="card-tags">
+              <span class="tag">Delivery</span>
+              <span class="tag">AdTech</span>
+              <span class="tag">Local Commerce</span>
+            </div>
           </div>
 
         </div>
@@ -682,7 +888,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>&copy; 2026 Seedwork ApS</span>
+        <span>&copy; 2026 Seedwork ApS · CVR 46232194</span>
         <span><a href="#">Privacy</a> &middot; <a href="#">Terms</a></span>
       </div>
     </div>
@@ -691,7 +897,6 @@
   <script>
     const q = s => document.querySelectorAll(s);
     const mo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     if (!mo) {
       const o = new IntersectionObserver(es => {
         es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); o.unobserve(e.target); } });
