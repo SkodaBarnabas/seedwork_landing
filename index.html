@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seedwork — Validate first. Build what works.</title>
+  <meta name="description" content="Seedwork is a Danish venture studio that runs ideas in parallel, validates them against real markets, and builds only what survives.">
+  <meta name="theme-color" content="#050A18">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='32' y2='32' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%234B7BFF'/%3E%3Cstop offset='1' stop-color='%23A855F7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='8' r='4' fill='url(%23g)'/%3E%3Ccircle cx='7' cy='24' r='3' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Ccircle cx='25' cy='24' r='3' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Cline x1='16' y1='12' x2='7' y2='21' stroke='url(%23g)' stroke-width='1.5'/%3E%3Cline x1='16' y1='12' x2='25' y2='21' stroke='url(%23g)' stroke-width='1.5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+  <style>
+    /* ========== Reset ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ========== Tokens ========== */
+    :root {
+      --bg: #050A18;
+      --bg-surface: #0A1128;
+      --accent: #4B7BFF;
+      --accent-hover: #3A66E0;
+      --accent-glow: rgba(75, 123, 255, 0.12);
+      --purple: #A855F7;
+      --text: #E8ECF4;
+      --text-secondary: #7A8BA8;
+      --border: rgba(255, 255, 255, 0.06);
+      --glass: rgba(10, 17, 40, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-border-hover: rgba(75, 123, 255, 0.2);
+      --green: #34D399;
+      --amber: #FBBF24;
+      --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+      --font-body: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --max-width: 1100px;
+      --section-pad: clamp(64px, 10vw, 120px);
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* ========== Base ========== */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.15; }
+    ul { list-style: none; }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========== Shared ========== */
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .glass {
+      background: var(--glass);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+    }
+
+    /* ========== Buttons ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 1;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s var(--ease);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .btn-sm {
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+
+    /* ========== Pulse Dot ========== */
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      position: relative;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .pulse-dot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: inherit;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .pulse-green { background: var(--green); }
+    .pulse-amber { background: var(--amber); }
+
+    /* ========== Navbar ========== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(5, 10, 24, 0.6);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-text {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.25s var(--ease);
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      margin-left: 8px;
+    }
+
+    /* ========== Hero ========== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+
+    /* Hero atmospheric background */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(75, 123, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(75, 123, 255, 0.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      background-position: center center;
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 55%, rgba(75, 123, 255, 0.07), transparent),
+        radial-gradient(ellipse 50% 60% at 80% 35%, rgba(168, 85, 247, 0.04), transparent),
+        radial-gradient(ellipse 60% 40% at 50% 70%, rgba(75, 123, 255, 0.03), transparent);
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 25%, var(--bg) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      animation: fade-up 0.7s var(--ease) both;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 7.5vw, 72px);
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      animation: fade-up 0.7s var(--ease) 0.1s both;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2.2vw, 19px);
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+      animation: fade-up 0.7s var(--ease) 0.2s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fade-up 0.7s var(--ease) 0.3s both;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      opacity: 0.5;
+      animation: fade-up 0.7s var(--ease) 0.6s both;
+    }
+
+    .scroll-hint-line {
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(180deg, var(--accent), transparent);
+      border-radius: 1px;
+      animation: scroll-pulse 2s ease-in-out infinite;
+    }
+
+    /* ========== Introduction ========== */
+    .intro {
+      padding: var(--section-pad) 0;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .intro-text h2 {
+      font-size: clamp(28px, 5vw, 44px);
+      margin-bottom: 24px;
+      letter-spacing: -0.5px;
+    }
+
+    .intro-text p {
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    .intro-text p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .intro-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .intro-stat-value {
+      font-family: var(--font-display);
+      font-size: 32px;
+      display: block;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .intro-stat-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* Orbital Diagram */
+    .orbit-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .orbit {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      flex-shrink: 0;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(75, 123, 255, 0.08);
+      top: 50%;
+      left: 50%;
+    }
+
+    .orbit-ring-1 {
+      width: 160px;
+      height: 160px;
+      transform: translate(-50%, -50%);
+    }
+
+    .orbit-ring-2 {
+      width: 290px;
+      height: 290px;
+      transform: translate(-50%, -50%);
+    }
+
+    .orbit-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--accent);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      z-index: 2;
+    }
+
+    .orbit-node {
+      position: absolute;
+      z-index: 1;
+      animation: orbit-float 5s ease-in-out infinite;
+    }
+
+    .orbit-node span {
+      display: block;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+    }
+
+    .orbit-node-1 { top: 8%; left: 58%; animation-delay: 0s; }
+    .orbit-node-2 { top: 50%; right: 0%; animation-delay: -1.3s; }
+    .orbit-node-3 { bottom: 8%; left: 12%; animation-delay: -2.6s; }
+    .orbit-node-4 { top: 35%; left: -2%; animation-delay: -3.9s; }
+
+    .orbit-node-4 span {
+      color: var(--accent);
+      border-style: dashed;
+    }
+
+    /* Connecting lines (SVG inside orbit) */
+    .orbit-lines {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* ========== Ecosystem ========== */
+    .ecosystem {
+      padding: var(--section-pad) 0;
+      background: var(--bg-surface);
+    }
+
+    .eco-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .eco-header h2 {
+      font-size: clamp(28px, 5vw, 44px);
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .eco-header p {
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .eco-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .eco-card {
+      padding: 32px;
+      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+
+    .eco-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--glass-border-hover);
+      box-shadow: 0 8px 40px rgba(75, 123, 255, 0.08);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 12px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(75, 123, 255, 0.08);
+      border: 1px solid rgba(75, 123, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .badge-building { color: var(--green); }
+    .badge-validating { color: var(--amber); }
+
+    .card-cvr {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      letter-spacing: 0.5px;
+    }
+
+    .card-title {
+      font-family: var(--font-body);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .card-tagline {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .card-details {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-details li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .card-details li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(75, 123, 255, 0.08);
+      color: var(--accent);
+      letter-spacing: 0.3px;
+    }
+
+    /* BudGruppen sub-ventures */
+    .sub-ventures {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .sub-venture {
+      padding: 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .sub-name {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .sub-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ========== Footer ========== */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0 0;
+    }
+
+    .footer-top {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-brand-row span {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .footer-columns {
+      display: flex;
+      gap: 64px;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      transition: color 0.25s var(--ease);
+    }
+
+    .footer-col a:hover { color: var(--text); }
+
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 0;
+      font-size: 13px;
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    .footer-bottom a {
+      color: inherit;
+      transition: color 0.25s var(--ease);
+    }
+
+    .footer-bottom a:hover { color: var(--text); opacity: 1; }
+
+    /* ========== Animations ========== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children */
+    .fade-in-stagger > .fade-in:nth-child(1) { transition-delay: 0s; }
+    .fade-in-stagger > .fade-in:nth-child(2) { transition-delay: 0.08s; }
+    .fade-in-stagger > .fade-in:nth-child(3) { transition-delay: 0.16s; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      @keyframes fade-up {
+        from { opacity: 0; transform: translateY(24px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0; transform: scale(2.5); }
+      }
+
+      @keyframes orbit-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+
+      @keyframes scroll-pulse {
+        0% { opacity: 0.3; transform: scaleY(0.6); transform-origin: top; }
+        50% { opacity: 1; transform: scaleY(1); }
+        100% { opacity: 0.3; transform: scaleY(0.6); transform-origin: bottom; }
+      }
+    }
+
+    /* ========== Reduced Motion ========== */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+
+      .hero-pill, .hero h1, .hero-sub, .hero-buttons, .scroll-hint {
+        animation: none !important;
+        opacity: 1;
+      }
+
+      .fade-in {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .orbit-node { animation: none; }
+      .pulse-dot::before { animation: none; }
+      .scroll-hint-line { animation: none; }
+
+      .eco-card:hover { transform: none; }
+    }
+
+    /* ========== Responsive: Tablet ========== */
+    @media (min-width: 640px) {
+      .eco-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      /* BudGruppen card spans full width */
+      .eco-card-wide {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* ========== Responsive: Desktop ========== */
+    @media (min-width: 768px) {
+      body { font-size: 17px; }
+
+      .intro-grid {
+        grid-template-columns: 1.1fr 1fr;
+        gap: 80px;
+      }
+
+      .footer-top {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+    }
+
+    @media (min-width: 960px) {
+      .eco-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .eco-card-wide {
+        grid-column: auto;
+      }
+    }
+
+    /* ========== Responsive: Mobile ========== */
+    @media (max-width: 767px) {
+      .nav-links { display: none; }
+
+      .hero h1 br { display: none; }
+
+      .intro-stats {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .orbit {
+        width: 280px;
+        height: 280px;
+      }
+
+      .orbit-ring-2 {
+        width: 240px;
+        height: 240px;
+      }
+
+      .orbit-node-2 { right: -8%; }
+      .orbit-node-4 { left: -8%; }
+
+      .footer-columns { gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== Navbar ========== -->
+  <header class="navbar">
+    <nav class="nav-inner">
+      <a href="#" class="brand">
+        <svg width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="brand-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4B7BFF"/>
+              <stop offset="1" stop-color="#A855F7"/>
+            </linearGradient>
+          </defs>
+          <circle cx="16" cy="8" r="4" fill="url(#brand-grad)"/>
+          <circle cx="7" cy="24" r="3" fill="none" stroke="url(#brand-grad)" stroke-width="2"/>
+          <circle cx="25" cy="24" r="3" fill="none" stroke="url(#brand-grad)" stroke-width="2"/>
+          <line x1="16" y1="12" x2="7" y2="21" stroke="url(#brand-grad)" stroke-width="1.5"/>
+          <line x1="16" y1="12" x2="25" y2="21" stroke="url(#brand-grad)" stroke-width="1.5"/>
+        </svg>
+        <span class="brand-text">Seedwork</span>
+      </a>
+      <div class="nav-links">
+        <a href="#intro">About</a>
+        <a href="#ecosystem">Ecosystem</a>
+      </div>
+      <a href="mailto:hello@seedwork.dk" class="btn btn-primary btn-sm nav-cta">Get in Touch</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ========== Hero ========== -->
+    <section class="hero" id="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-pill">
+          <span class="pulse-dot pulse-green"></span>
+          Building in parallel
+        </div>
+        <h1>We <em>validate</em> ideas<br>before we build them</h1>
+        <p class="hero-sub">Seedwork is a Danish venture studio. We run ideas in parallel, test them against real markets, and build only what survives.</p>
+        <div class="hero-buttons">
+          <a href="#ecosystem" class="btn btn-primary">Explore the ecosystem</a>
+          <a href="#intro" class="btn btn-ghost">How we think</a>
+        </div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true">
+        <div class="scroll-hint-line"></div>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <polyline points="3,6 8,11 13,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ========== Introduction ========== -->
+    <section class="intro" id="intro">
+      <div class="container">
+        <div class="intro-grid">
+          <div class="intro-text fade-in">
+            <span class="section-label">Philosophy</span>
+            <h2>Verify demand.<br>Then engineer the solution.</h2>
+            <p>Most startups fail because they build before they validate. We don't. Seedwork runs multiple ideas in parallel, using real signals — revenue, signups, unit economics — to decide what lives and what dies.</p>
+            <p>If an idea survives validation, we build it properly. If it doesn't, we kill it before it costs real money. No sunk-cost fallacies. No vanity metrics. Just disciplined signal-reading from an engineering-first team.</p>
+            <div class="intro-stats">
+              <div class="intro-stat">
+                <span class="intro-stat-value">4+</span>
+                <span class="intro-stat-label">Ideas in parallel</span>
+              </div>
+              <div class="intro-stat">
+                <span class="intro-stat-value">&lt;4w</span>
+                <span class="intro-stat-label">Validation cycle</span>
+              </div>
+              <div class="intro-stat">
+                <span class="intro-stat-value">0</span>
+                <span class="intro-stat-label">Wasted builds</span>
+              </div>
+            </div>
+          </div>
+          <div class="orbit-wrap fade-in">
+            <div class="orbit">
+              <div class="orbit-ring orbit-ring-1"></div>
+              <div class="orbit-ring orbit-ring-2"></div>
+              <div class="orbit-center">SW</div>
+              <div class="orbit-node orbit-node-1"><span>Core1000</span></div>
+              <div class="orbit-node orbit-node-2"><span>BudGruppen</span></div>
+              <div class="orbit-node orbit-node-3"><span>Grain</span></div>
+              <div class="orbit-node orbit-node-4"><span>Next</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Ecosystem ========== -->
+    <section class="ecosystem" id="ecosystem">
+      <div class="container">
+        <div class="eco-header fade-in">
+          <span class="section-label">Ecosystem</span>
+          <h2>What we're building</h2>
+          <p>Three ventures at different stages. Each targeting a different inefficiency. All validated in parallel.</p>
+        </div>
+        <div class="eco-grid fade-in-stagger">
+
+          <!-- Core1000 -->
+          <div class="eco-card glass fade-in">
+            <div class="card-top">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <rect x="2" y="12" width="4" height="6" rx="1" fill="currentColor" opacity="0.35"/>
+                  <rect x="8" y="8" width="4" height="10" rx="1" fill="currentColor" opacity="0.6"/>
+                  <rect x="14" y="3" width="4" height="15" rx="1" fill="currentColor"/>
+                </svg>
+              </div>
+              <span class="status-badge badge-validating">
+                <span class="pulse-dot pulse-amber"></span>
+                Validating
+              </span>
+            </div>
+            <h3 class="card-title">Core1000</h3>
+            <p class="card-tagline">Learn 1,000 words. Understand 80% of everyday conversation.</p>
+            <p class="card-desc">Language learning built on corpus linguistics, not gamification. Teaches the highest-frequency words in strict order, paired with 40 reusable sentence templates and driven by FSRS spaced repetition. A coverage meter shows one number: the percentage of real conversation you now understand.</p>
+            <ul class="card-details">
+              <li>Templates first, words second — patterns generate thousands of natural exercises</li>
+              <li>Four-stage mastery: Introduction → Recognition → Recall → Production</li>
+              <li>Intelligent error detection with animated corrections for word order, negation, gender</li>
+              <li>Movie and series courses for contextual vocabulary beyond the core</li>
+              <li>Launching in Danish. Next: Spanish, English, Portuguese, French, Indonesian</li>
+            </ul>
+            <div class="card-tags">
+              <span class="tag">Language Learning</span>
+              <span class="tag">SaaS</span>
+              <span class="tag">EdTech</span>
+            </div>
+          </div>
+
+          <!-- BudGruppen -->
+          <div class="eco-card glass eco-card-wide fade-in">
+            <div class="card-top">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <circle cx="10" cy="5" r="2.5" fill="currentColor"/>
+                  <circle cx="4" cy="15" r="2.5" fill="currentColor" opacity="0.6"/>
+                  <circle cx="16" cy="15" r="2.5" fill="currentColor" opacity="0.6"/>
+                  <line x1="10" y1="7.5" x2="4" y2="12.5" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>
+                  <line x1="10" y1="7.5" x2="16" y2="12.5" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>
+                </svg>
+              </div>
+              <div class="card-meta">
+                <span class="card-cvr">CVR 46232194</span>
+                <span class="status-badge badge-building">
+                  <span class="pulse-dot pulse-green"></span>
+                  Building
+                </span>
+              </div>
+            </div>
+            <h3 class="card-title">BudGruppen</h3>
+            <p class="card-tagline">Three ventures. One thesis: cut the middleman.</p>
+            <p class="card-desc">A group of lean, product-focused businesses built out of Sønderborg, Denmark. Each targets a different inefficiency in how local economies move money, food, and attention.</p>
+            <div class="sub-ventures">
+              <div class="sub-venture">
+                <div class="sub-name">BudMedia</div>
+                <p class="sub-desc">Free branded pizza boxes for restaurants, funded by local advertising printed on the surface. Sits on a kitchen table for 30 minutes, reaches 2.8 people per box. Can't be blocked or skipped.</p>
+              </div>
+              <div class="sub-venture">
+                <div class="sub-name">MadBud</div>
+                <p class="sub-desc">Food delivery where the 15% commission goes back to the customer as an automatic discount. Restaurants use own drivers. 7 DKK platform fee only. Over 100 DKK saved per typical order vs. Wolt or Just Eat.</p>
+              </div>
+              <div class="sub-venture">
+                <div class="sub-name">SnackBud</div>
+                <p class="sub-desc">Early-stage exploration into vending and snack distribution. The physical retail layer of the BudGruppen ecosystem.</p>
+              </div>
+            </div>
+            <div class="card-tags">
+              <span class="tag">Delivery</span>
+              <span class="tag">AdTech</span>
+              <span class="tag">Local Commerce</span>
+            </div>
+          </div>
+
+          <!-- Grain -->
+          <div class="eco-card glass fade-in">
+            <div class="card-top">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M2 10s3.5-6 8-6 8 6 8 6-3.5 6-8 6-8-6-8-6z" stroke="currentColor" stroke-width="1.3" fill="none"/>
+                  <circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none"/>
+                  <circle cx="10" cy="10" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+              <span class="status-badge badge-validating">
+                <span class="pulse-dot pulse-amber"></span>
+                Validating
+              </span>
+            </div>
+            <h3 class="card-title">Grain</h3>
+            <p class="card-tagline">See what's real.</p>
+            <p class="card-desc">Consumer AI content detection tool — browser extension and mobile app that scans social media feeds in real time, flagging deepfakes, AI-generated media, and false claims before they spread.</p>
+            <ul class="card-details">
+              <li>8M deepfakes online, human detection accuracy at just 24.5%</li>
+              <li>Passive feed scanning on YouTube and Instagram — no extra steps</li>
+              <li>Privacy-first: zero data collection, no ads, no tracking — ever</li>
+              <li>Freemium: free daily scans, Grain Pro at $4.99/mo for unlimited</li>
+              <li>Detection data trains proprietary models → API → enterprise licensing</li>
+              <li>Chrome extension MVP in development, traction via waitlist</li>
+            </ul>
+            <div class="card-tags">
+              <span class="tag">AI Safety</span>
+              <span class="tag">Browser Extension</span>
+              <span class="tag">Consumer</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-brand-row">
+            <svg width="20" height="20" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="footer-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#4B7BFF"/>
+                  <stop offset="1" stop-color="#A855F7"/>
+                </linearGradient>
+              </defs>
+              <circle cx="16" cy="8" r="4" fill="url(#footer-grad)"/>
+              <circle cx="7" cy="24" r="3" fill="none" stroke="url(#footer-grad)" stroke-width="2"/>
+              <circle cx="25" cy="24" r="3" fill="none" stroke="url(#footer-grad)" stroke-width="2"/>
+              <line x1="16" y1="12" x2="7" y2="21" stroke="url(#footer-grad)" stroke-width="1.5"/>
+              <line x1="16" y1="12" x2="25" y2="21" stroke="url(#footer-grad)" stroke-width="1.5"/>
+            </svg>
+            <span>Seedwork</span>
+          </div>
+          <p>Validate first. Build what works.</p>
+        </div>
+        <div class="footer-columns">
+          <div class="footer-col">
+            <h4>Company</h4>
+            <a href="#intro">About</a>
+            <a href="#ecosystem">Ecosystem</a>
+            <a href="mailto:hello@seedwork.dk">Contact</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Seedwork ApS</span>
+        <span><a href="#">Privacy</a> &middot; <a href="#">Terms</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ========== IntersectionObserver ========== */
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!reduced) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    } else {
+      document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+    }
+  </script>
+
+</body>
+</html>
