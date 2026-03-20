@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seedwork — Venture Studio</title>
+  <meta name="description" content="Seedwork is a Danish venture studio that originates, validates, and scales entrepreneurial ideas.">
+  <meta name="theme-color" content="#0A0A0F">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='8' r='4' fill='%236366F1'/%3E%3Ccircle cx='8' cy='26' r='3' fill='none' stroke='%236366F1' stroke-width='2'/%3E%3Ccircle cx='24' cy='26' r='3' fill='none' stroke='%236366F1' stroke-width='2'/%3E%3Cline x1='16' y1='12' x2='8' y2='23' stroke='%236366F1' stroke-width='2'/%3E%3Cline x1='16' y1='12' x2='24' y2='23' stroke='%236366F1' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========== Reset ========== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ========== Custom Properties ========== */
+    :root {
+      --bg: #0A0A0F;
+      --bg-surface: #13131A;
+      --accent: #6366F1;
+      --accent-hover: #5558E6;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --text: #F0F0F5;
+      --text-secondary: #8B8B9E;
+      --border: #1E1E2E;
+      --green: #22C55E;
+      --amber: #F59E0B;
+      --blue: #3B82F6;
+      --font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+      --max-width: 1100px;
+      --section-pad: clamp(60px, 10vw, 120px);
+      --transition: 200ms ease;
+    }
+
+    /* ========== Base ========== */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      background-color: var(--bg);
+      background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1.5' cy='1.5' r='0.75' fill='%23ffffff' opacity='0.03'/%3E%3C/svg%3E");
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      line-height: 1.2;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* ========== Layout ========== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-heading {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    /* ========== Buttons ========== */
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition);
+      text-decoration: none;
+      border: none;
+      line-height: 1;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ========== Nav ========== */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      transition: background 0.3s ease, border-color 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    .site-header.scrolled {
+      background: rgba(10, 10, 15, 0.8);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom-color: var(--border);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-brand svg {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .nav-brand span {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      font-size: 14px;
+      padding: 10px 20px;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 101;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    .nav-toggle span + span {
+      margin-top: 6px;
+    }
+
+    .nav-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(4px, 6px);
+    }
+
+    .nav-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(4px, -6px);
+    }
+
+    /* ========== Hero ========== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-mesh {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-mesh::before,
+    .hero-mesh::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+    }
+
+    .hero-mesh::before {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+      top: 20%;
+      left: 25%;
+      animation: mesh-a 12s ease-in-out infinite alternate;
+    }
+
+    .hero-mesh::after {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
+      bottom: 10%;
+      right: 20%;
+      animation: mesh-b 15s ease-in-out infinite alternate;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--text-secondary);
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    /* ========== About ========== */
+    .about {
+      padding: var(--section-pad) 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .stat {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ========== Founder ========== */
+    .founder {
+      padding: var(--section-pad) 0;
+    }
+
+    .founder-inner {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .founder-name {
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .founder-role {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .founder-bio {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .founder-credentials {
+      border-left: 2px solid var(--accent);
+      padding-left: 24px;
+      list-style: none;
+    }
+
+    .founder-credentials li {
+      color: var(--text-secondary);
+      font-size: 15px;
+      padding: 6px 0;
+      position: relative;
+    }
+
+    .founder-credentials li + li {
+      border-top: 1px solid var(--border);
+    }
+
+    /* ========== Ventures ========== */
+    .ventures {
+      padding: var(--section-pad) 0;
+    }
+
+    .venture-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .venture-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .venture-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+
+    .venture-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+
+    .venture-name {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .venture-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .venture-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .badge-live {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--green);
+    }
+
+    .badge-live::before {
+      background: var(--green);
+    }
+
+    .badge-dev {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--amber);
+    }
+
+    .badge-dev::before {
+      background: var(--amber);
+    }
+
+    .badge-validating {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--blue);
+    }
+
+    .badge-validating::before {
+      background: var(--blue);
+    }
+
+    .venture-tagline {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .venture-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ========== Approach ========== */
+    .approach {
+      padding: var(--section-pad) 0;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      position: relative;
+    }
+
+    .step {
+      display: flex;
+      gap: 24px;
+      position: relative;
+    }
+
+    .step-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .step-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: var(--border);
+      margin-top: 8px;
+    }
+
+    .step:last-child .step-line {
+      display: none;
+    }
+
+    .step-content {
+      padding-top: 4px;
+      padding-bottom: 8px;
+    }
+
+    .step-number {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .step-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    /* ========== Contact ========== */
+    .contact {
+      padding: var(--section-pad) 0;
+    }
+
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-text {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .contact-email {
+      font-family: var(--font-heading);
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: 500;
+      color: var(--accent);
+      transition: color var(--transition);
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+
+    .contact-email:hover {
+      color: var(--text);
+    }
+
+    .contact-secondary {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .contact-secondary a {
+      color: var(--text-secondary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color var(--transition);
+    }
+
+    .contact-secondary a:hover {
+      color: var(--accent);
+    }
+
+    /* ========== Footer ========== */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .footer-legal a {
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+
+    .footer-legal a:hover {
+      color: var(--text);
+    }
+
+    .footer-legal span {
+      margin: 0 8px;
+      opacity: 0.4;
+    }
+
+    /* ========== Fade-in Animation ========== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========== Keyframes ========== */
+    @media (prefers-reduced-motion: no-preference) {
+      @keyframes mesh-a {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(60px, -40px) scale(1.15); }
+      }
+
+      @keyframes mesh-b {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(-50px, 30px) scale(1.1); }
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+        50% { transform: translateX(-50%) translateY(10px); opacity: 1; }
+      }
+    }
+
+    /* ========== Reduced Motion ========== */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .fade-in {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .hero-mesh::before,
+      .hero-mesh::after {
+        animation: none;
+      }
+
+      .scroll-indicator {
+        animation: none;
+        opacity: 0.6;
+      }
+
+      .venture-card:hover {
+        transform: none;
+      }
+    }
+
+    /* ========== Responsive: Tablet+ ========== */
+    @media (min-width: 640px) {
+      .venture-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* ========== Responsive: Desktop ========== */
+    @media (min-width: 768px) {
+      .about-grid {
+        grid-template-columns: 1.2fr 1fr;
+        gap: 64px;
+      }
+
+      .footer-inner {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+      }
+
+      /* Approach: horizontal stepper */
+      .steps {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+      }
+
+      .step {
+        flex-direction: column;
+        text-align: center;
+        padding: 0 16px;
+      }
+
+      .step-marker {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .step-line {
+        width: auto;
+        height: 2px;
+        flex: 1;
+        margin-top: 0;
+        margin-left: 8px;
+      }
+
+      .step:last-child .step-line {
+        display: none;
+      }
+
+      .step-content {
+        padding-top: 0;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .venture-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* ========== Mobile Nav ========== */
+    @media (max-width: 767px) {
+      .nav-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(10, 10, 15, 0.95);
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        padding: 24px;
+        border-bottom: 1px solid var(--border);
+        gap: 20px;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 16px;
+      }
+
+      .nav-cta {
+        align-self: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== Header / Nav ========== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav">
+        <a href="#" class="nav-brand">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <circle cx="14" cy="6" r="3" fill="currentColor"/>
+            <circle cx="6" cy="22" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <circle cx="22" cy="22" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <line x1="14" y1="9" x2="7" y2="19.5" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="14" y1="9" x2="21" y2="19.5" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <span>Seedwork</span>
+        </a>
+
+        <button class="nav-toggle" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#ventures">Ventures</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#contact" class="btn btn-primary nav-cta">Get in Touch</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ========== Hero ========== -->
+    <section class="hero" id="hero">
+      <div class="hero-mesh" aria-hidden="true"></div>
+      <div class="hero-content">
+        <h1>Ventures built,<br>not backed</h1>
+        <p class="hero-sub">A Danish venture studio that originates, validates, and scales entrepreneurial ideas from first signal to market.</p>
+        <div class="hero-buttons">
+          <a href="#ventures" class="btn btn-primary">Explore Our Ventures</a>
+          <a href="#founder" class="btn btn-ghost">About the Founder</a>
+        </div>
+      </div>
+      <div class="scroll-indicator" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ========== About ========== -->
+    <section class="about" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-text fade-in">
+            <span class="section-label">About</span>
+            <h2 class="section-heading">We build companies from scratch</h2>
+            <p>We don't invest in startups — we build them. Seedwork originates ideas, tests them against real markets, and scales what works. No pitch decks. No waiting for founders to show up. We are the founders.</p>
+            <p>Every venture begins with a thesis about where value is being extracted unnecessarily. We find the structural inefficiency, design a fairer model, and move fast to prove it.</p>
+            <p>Our ventures span food tech, language learning, consumer AI, and physical retail — connected not by industry, but by a shared conviction that better economics create better products.</p>
+          </div>
+          <div class="stat-grid fade-in">
+            <div class="stat">
+              <div class="stat-value">5</div>
+              <div class="stat-label">Ventures</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">3</div>
+              <div class="stat-label">Markets</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">0→1</div>
+              <div class="stat-label">Our Focus</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">DK</div>
+              <div class="stat-label">Copenhagen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Founder ========== -->
+    <section class="founder" id="founder">
+      <div class="container">
+        <div class="founder-inner fade-in">
+          <span class="section-label">Founder</span>
+          <h2 class="founder-name">[Founder Name]</h2>
+          <p class="founder-role">Founder &amp; CEO, Seedwork</p>
+          <p class="founder-bio">[Insert 3–5 sentences about the founder — their background, what drives them, and why they started Seedwork. This section should convey competence and conviction without reading like a LinkedIn summary.]</p>
+          <ul class="founder-credentials">
+            <li>[Background fact or credential]</li>
+            <li>[Background fact or credential]</li>
+            <li>[Background fact or credential]</li>
+            <li>[Background fact or credential]</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Ventures ========== -->
+    <section class="ventures" id="ventures">
+      <div class="container">
+        <span class="section-label">Ventures</span>
+        <h2 class="section-heading fade-in">What we're building</h2>
+        <div class="venture-grid">
+
+          <div class="venture-card fade-in">
+            <div class="venture-header">
+              <h3 class="venture-name">BudMedia</h3>
+              <span class="venture-badge badge-live">Live</span>
+            </div>
+            <p class="venture-tagline">Zero-cost branded packaging, funded by local advertising</p>
+            <p class="venture-desc">Restaurants receive professionally printed, branded pizza boxes at zero cost. Local businesses advertise on a medium that sits on kitchen tables for 30 minutes and reaches 2.8 people per box — unskippable, unblockable, and unmissable.</p>
+          </div>
+
+          <div class="venture-card fade-in">
+            <div class="venture-header">
+              <h3 class="venture-name">MadBud</h3>
+              <span class="venture-badge badge-dev">In Development</span>
+            </div>
+            <p class="venture-tagline">Food delivery where the commission goes back to customers</p>
+            <p class="venture-desc">MadBud collects the standard 15% commission and returns it entirely to consumers as an automatic discount. On a typical 250 DKK order, customers save over 100 DKK compared to major platforms. Restaurants use their own drivers — no courier fleet, no inflated prices.</p>
+          </div>
+
+          <div class="venture-card fade-in">
+            <div class="venture-header">
+              <h3 class="venture-name">Core1000</h3>
+              <span class="venture-badge badge-dev">In Development</span>
+            </div>
+            <p class="venture-tagline">Learn 1,000 words. Understand 80% of everyday conversation.</p>
+            <p class="venture-desc">Language learning rebuilt on corpus linguistics. 1,000 high-frequency words in strict frequency order, paired with 40 reusable sentence templates and powered by FSRS — the most accurate spaced repetition algorithm in existence.</p>
+          </div>
+
+          <div class="venture-card fade-in">
+            <div class="venture-header">
+              <h3 class="venture-name">Grain</h3>
+              <span class="venture-badge badge-validating">Validating</span>
+            </div>
+            <p class="venture-tagline">Real-time AI content detection for everyone</p>
+            <p class="venture-desc">A browser extension that scans social media feeds in real time, flagging deepfakes, AI-generated media, and false claims before they spread. Privacy-first: zero data collection, no tracking, no ads — ever.</p>
+          </div>
+
+          <div class="venture-card fade-in">
+            <div class="venture-header">
+              <h3 class="venture-name">SnackBud</h3>
+              <span class="venture-badge badge-validating">Validating</span>
+            </div>
+            <p class="venture-tagline">Rethinking vending and snack distribution from the ground up</p>
+            <p class="venture-desc">An early-stage exploration into physical retail — vending and snack distribution. The thesis: find where margin is being extracted unnecessarily and rebuild the model around the people actually involved.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Approach ========== -->
+    <section class="approach" id="approach">
+      <div class="container">
+        <span class="section-label">Process</span>
+        <h2 class="section-heading fade-in">How we build</h2>
+        <div class="steps">
+
+          <div class="step fade-in">
+            <div class="step-marker">
+              <div class="step-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="15.5" y1="15.5" x2="20" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-number">01</div>
+              <h3 class="step-title">Identify</h3>
+              <p class="step-desc">We scan markets for structural inefficiencies — places where middlemen extract value without earning it. Every venture starts with a thesis.</p>
+            </div>
+          </div>
+
+          <div class="step fade-in">
+            <div class="step-marker">
+              <div class="step-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5"/>
+                  <polyline points="8.5,12 11,14.5 15.5,10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-number">02</div>
+              <h3 class="step-title">Validate</h3>
+              <p class="step-desc">Before building anything, we test demand with real users and real money. If the signal isn't there, we kill it early and move on.</p>
+            </div>
+          </div>
+
+          <div class="step fade-in">
+            <div class="step-marker">
+              <div class="step-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <polyline points="9,6 4,12 9,18" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="15,6 20,12 15,18" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-number">03</div>
+              <h3 class="step-title">Build</h3>
+              <p class="step-desc">Small teams, fast iteration, zero excess. We ship MVPs measured in weeks, not quarters. The product is the proof.</p>
+            </div>
+          </div>
+
+          <div class="step fade-in">
+            <div class="step-marker">
+              <div class="step-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <polyline points="15,4 20,4 20,9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="13" y1="11" x2="20" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <polyline points="9,20 4,20 4,15" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="11" y1="13" x2="4" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-number">04</div>
+              <h3 class="step-title">Scale</h3>
+              <p class="step-desc">Ventures that survive validation get the resources to grow — operational infrastructure, partnerships, and the capital to go further.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Contact ========== -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact-inner fade-in">
+          <span class="section-label">Contact</span>
+          <h2 class="section-heading">Let's talk</h2>
+          <p class="contact-text">Whether you're a potential partner, an advertiser, or just curious about what we're building — we'd like to hear from you.</p>
+          <a href="mailto:hello@seedwork.dk" class="contact-email">hello@seedwork.dk</a>
+          <p class="contact-secondary">Copenhagen, Denmark · <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>&copy; 2026 Seedwork</div>
+        <div>CVR: [Insert CVR] · Copenhagen, Denmark</div>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <span>·</span>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ========== Nav Scroll ========== */
+    const header = document.querySelector('.site-header');
+    const onScroll = () => {
+      header.classList.toggle('scrolled', window.scrollY > 20);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ========== Hamburger Toggle ========== */
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    /* Close mobile nav on link click */
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        toggle.classList.remove('active');
+        navLinks.classList.remove('active');
+      });
+    });
+
+    /* ========== IntersectionObserver Fade-In ========== */
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    } else {
+      document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+    }
+  </script>
+
+</body>
+</html>
