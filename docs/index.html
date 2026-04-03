@@ -4,1231 +4,874 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seedwork Validate first. Build what works.</title>
+  <title>Seedwork | Test first. Build what works.</title>
   <meta name="description"
     content="Seedwork is a Danish venture studio that runs ideas in parallel, validates them against real markets, and builds only what survives.">
-  <meta name="theme-color" content="#0D0D0F">
+  <meta name="theme-color" content="#050505">
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='28' font-size='28'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='white' stroke-width='1.5'/%3E%3Cpath d='M16 8L16 24M8 16L24 16' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  
   <style>
-    *,
-    *::before,
-    *::after {
+    :root {
+      --bg: #050505;
+      --bg-accent: #0A0A0B;
+      --text: #FFFFFF;
+      --text-muted: #A1A1AA;
+      --text-dim: #71717A;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-light: rgba(255, 255, 255, 0.12);
+      --accent: #4285F4;
+      --grad-primary: linear-gradient(135deg, #4285F4, #9333EA, #DB2777);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+      --radius-xl: 2.5rem;
+      --radius-lg: 2rem;
+      --radius-md: 1.25rem;
+      --radius-sm: 0.75rem;
+    }
+
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-    }
-
-    :root {
-      --bg: #0D0D0F;
-      --bg-2: #1A1A1E;
-      --bg-3: #222226;
-      --text: #FFFFFF;
-      --text-2: #E0E0E4;
-      --text-3: #9A9AA0;
-      --border: rgba(255, 255, 255, 0.08);
-      --blue: #4285F4;
-      --purple: #A855F7;
-      --pink: #D946EF;
-      --green: #34D399;
-      --amber: #FBBF24;
-      --grad: linear-gradient(135deg, #4285F4, #7B61FF, #D946EF);
-      --font: 'Inter', -apple-system, system-ui, sans-serif;
-      --max-w: 1080px;
-      --pad: clamp(64px, 10vw, 120px);
-      --radius: 16px;
-      --radius-sm: 10px;
-      --radius-pill: 100px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: 72px;
+      background: var(--bg);
     }
 
     body {
-      font-family: var(--font);
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 1.7;
-      color: var(--text-2);
+      font-family: var(--font-sans);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
       background: var(--bg);
-      -webkit-font-smoothing: antialiased;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    /* Noise Overlay */
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    ul {
-      list-style: none;
+    /* Typography */
+    h1, h2, h3 {
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
     }
 
-    .wrap {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 0 24px;
+    .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
     }
 
-    /* ---- Gradient text utility ---- */
     .grad-text {
-      background: var(--grad);
+      background: var(--grad-primary);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    /* ---- Nav ---- */
-    .nav {
+    /* Container */
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Fluid Island Nav */
+    .nav-container {
       position: fixed;
-      top: 0;
+      top: 1.5rem;
       left: 0;
       right: 0;
-      z-index: 100;
-      background: rgba(13, 13, 15, 0.8);
-      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .nav-island {
+      pointer-events: auto;
+      background: rgba(10, 10, 11, 0.6);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-inner {
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+      border-radius: 100px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      height: 64px;
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 0 24px;
+      gap: 2rem;
+      transition: all 0.5s var(--ease-fluid);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
-    .nav-brand {
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-brand img {
-      height: 28px;
+    .nav-logo img {
+      height: 20px;
       width: auto;
       display: block;
     }
 
-    .nav-right {
+    .nav-links {
       display: flex;
+      gap: 1.5rem;
       align-items: center;
-      gap: 32px;
     }
 
-    .nav-right a {
-      font-size: 14px;
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.875rem;
       font-weight: 500;
-      color: var(--text-3);
-      transition: color 0.2s;
+      transition: color 0.3s ease;
     }
 
-    .nav-right a:hover {
+    .nav-links a:hover {
       color: var(--text);
     }
 
-    .nav-right a.nav-cta,
-    .nav-right a.nav-cta:hover {
-      font-size: 14px;
-      font-weight: 700;
-      padding: 10px 22px;
-      background: #FFFFFF;
-      color: #000000;
-      border-radius: var(--radius-pill);
-      transition: opacity 0.2s;
-    }
-
-    .nav-right a.nav-cta:hover {
-      opacity: 0.85;
-    }
-
-    /* ---- Buttons ---- */
-    .btn {
-      font-family: var(--font);
-      font-size: 15px;
-      font-weight: 600;
-      padding: 14px 32px;
-      border-radius: var(--radius-pill);
-      border: none;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-p {
+    .nav-cta {
       background: var(--text);
       color: var(--bg);
+      padding: 0.625rem 1.25rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s var(--ease-fluid);
     }
 
-    .btn-p:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
+    .nav-cta:hover {
+      transform: scale(1.05);
+      background: #f0f0f0;
     }
 
-    .btn-g {
-      background: var(--bg-2);
-      color: var(--text-2);
-      border: 1px solid var(--border);
+    .nav-cta .icon-circle {
+      width: 20px;
+      height: 20px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .btn-g:hover {
-      background: var(--bg-3);
-      border-color: rgba(255, 255, 255, 0.15);
+    /* Sections */
+    section {
+      padding: 8rem 0;
     }
 
-    /* ---- Hero ---- */
     .hero {
-      position: relative;
-      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 120px 24px 80px;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: url('hero.jpg') center/cover no-repeat;
-    }
-
-    .hero-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(13, 13, 15, 0.7);
-    }
-
-    .hero-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, transparent 30%, var(--bg) 100%);
-    }
-
-    /* Soft gradient orbs */
-    .hero-glow {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .hero-glow::before {
-      content: '';
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(66, 133, 244, 0.12), transparent 70%);
-      top: 10%;
-      left: 15%;
-      filter: blur(60px);
-      animation: drift-a 15s ease-in-out infinite alternate;
-    }
-
-    .hero-glow::after {
-      content: '';
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(217, 70, 239, 0.08), transparent 70%);
-      bottom: 10%;
-      right: 10%;
-      filter: blur(60px);
-      animation: drift-b 18s ease-in-out infinite alternate;
-    }
-
-    .hero-body {
       position: relative;
+      overflow: hidden;
+      padding-top: 6rem;
+    }
+
+    /* Mesh Gradients */
+    .mesh-glow {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .glow-1 {
+      position: absolute;
+      top: -10%;
+      left: 10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(66, 133, 244, 0.15) 0%, transparent 70%);
+      filter: blur(100px);
+      animation: drift 20s infinite alternate;
+    }
+
+    .glow-2 {
+      position: absolute;
+      bottom: -10%;
+      right: 10%;
+      width: 50%;
+      height: 50%;
+      background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 70%);
+      filter: blur(80px);
+      animation: drift 15s infinite alternate-reverse;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(5%, 5%) scale(1.1); }
+    }
+
+    .hero-content {
+      max-width: 900px;
       z-index: 1;
-      max-width: 720px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+      color: var(--text-muted);
     }
 
     .hero h1 {
-      font-size: clamp(36px, 7vw, 64px);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -1.5px;
-      color: var(--text);
-      margin-bottom: 24px;
-    }
-
-    .hero-sub {
-      font-size: clamp(17px, 2.5vw, 20px);
-      color: var(--text-3);
-      max-width: 520px;
-      margin: 0 auto 40px;
-      line-height: 1.6;
-    }
-
-    .hero-btns {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .scroll-arrow {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--text-3);
-      opacity: 0.3;
-    }
-
-    /* ---- Section label ---- */
-    .label {
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-      display: inline-block;
-    }
-
-    /* ---- Intro ---- */
-    .intro {
-      padding: var(--pad) 0;
-    }
-
-    .intro-inner {
-      max-width: 640px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .intro h2 {
-      font-size: clamp(26px, 4.5vw, 40px);
-      font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -0.8px;
-      color: var(--text);
-      margin-bottom: 24px;
-    }
-
-    .intro p {
-      color: var(--text-3);
-      margin-bottom: 16px;
-      font-size: 17px;
-    }
-
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 48px;
-      margin-top: 48px;
-    }
-
-    .stat-val {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--text);
-      display: block;
+      font-size: clamp(3rem, 8vw, 6rem);
+      margin-bottom: 1.5rem;
       line-height: 1;
     }
 
-    .stat-lbl {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-3);
-      margin-top: 8px;
-      display: block;
+    .hero p {
+      font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 3rem;
     }
 
-    /* ---- Founder ---- */
-    .founder {
-      padding: var(--pad) 0;
-    }
-
-    .founder-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 40px;
+    /* CTA Button Architecture */
+    .btn-island {
+      background: var(--text);
+      color: var(--bg);
+      padding: 0.875rem 0.875rem 0.875rem 2rem;
+      border-radius: 100px;
+      font-weight: 600;
+      display: inline-flex;
       align-items: center;
-      max-width: 900px;
-      margin: 0 auto;
+      gap: 1.5rem;
+      text-decoration: none;
+      transition: all 0.5s var(--ease-fluid);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-    .founder-img {
-      border-radius: var(--radius);
+    .btn-island:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .btn-island .btn-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s var(--ease-fluid);
+    }
+
+    .btn-island:hover .btn-icon {
+      background: rgba(0,0,0,1);
+      color: white;
+      transform: rotate(45deg);
+    }
+
+    /* Double Bezel Architecture */
+    .bezel-outer {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      padding: 0.5rem;
+      border-radius: var(--radius-xl);
+      height: 100%;
+      transition: all 0.5s var(--ease-fluid);
+    }
+
+    .bezel-inner {
+      background: var(--bg-accent);
+      border-radius: calc(var(--radius-xl) - 0.5rem);
+      padding: 2.5rem;
+      height: 100%;
+      position: relative;
       overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
     }
 
-    .founder-img img {
-      width: 100%;
-      height: auto;
+    .bezel-outer:hover {
+      border-color: var(--border-light);
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-4px);
+    }
+
+    /* Bento Grid */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .bento-card {
+      grid-column: span 12;
+    }
+
+    @media (min-width: 768px) {
+      .bento-card-8 { grid-column: span 8; }
+      .bento-card-4 { grid-column: span 4; }
+      .bento-card-6 { grid-column: span 6; }
+    }
+
+    .card-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
       display: block;
     }
 
-    .founder-role {
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-    }
-
-    .founder-name {
-      font-size: clamp(26px, 4vw, 36px);
-      font-weight: 700;
-      letter-spacing: -0.8px;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
-
-    .founder-bio {
-      color: var(--text-3);
-      margin-bottom: 12px;
-      font-size: 17px;
-    }
-
-    .founder-creds {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    .founder-creds li {
-      font-size: 15px;
-      color: var(--text-3);
-      padding: 6px 0;
-      padding-left: 20px;
-      position: relative;
-    }
-
-    .founder-creds li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 14px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--grad);
-    }
-
-    /* ---- Ecosystem ---- */
-    .eco {
-      padding: var(--pad) 0;
-    }
-
-    .eco-head {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-
-    .eco-head h2 {
-      font-size: clamp(26px, 4.5vw, 40px);
-      font-weight: 700;
-      letter-spacing: -0.8px;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-
-    .eco-head p {
-      color: var(--text-3);
-      max-width: 500px;
-      margin: 0 auto;
-      font-size: 17px;
-    }
-
-    .cards {
+    .card-title {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
       display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .card {
-      background: var(--bg-2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-      transition: border-color 0.25s ease, background 0.25s ease;
-    }
-
-    .card:hover {
-      border-color: rgba(255, 255, 255, 0.14);
-      background: var(--bg-3);
-    }
-
-    .card-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-    }
-
-    .card-name {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .card-status {
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 4px 12px;
-      border-radius: var(--radius-pill);
-    }
-
-    .s-building {
-      color: var(--green);
-      background: rgba(52, 211, 153, 0.1);
-    }
-
-    .s-validating {
-      color: var(--amber);
-      background: rgba(251, 191, 36, 0.1);
-    }
-
-    .s-idea {
-      color: var(--text-3);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .card-cvr {
-      font-size: 12px;
-      color: var(--text-3);
-    }
-
-    .card-tagline {
-      font-size: 16px;
-      color: var(--text-3);
-      font-style: italic;
-      margin-bottom: 16px;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .card-desc {
-      font-size: 15px;
-      color: var(--text-3);
-      line-height: 1.7;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
     }
 
-    .card-list {
-      margin-top: 16px;
+    .status-pill {
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .card-list li {
-      font-size: 14px;
-      color: var(--text-3);
-      line-height: 1.6;
-      padding: 4px 0 4px 20px;
-      position: relative;
-    }
+    .status-validating { background: rgba(251, 191, 36, 0.1); color: #FBBF24; }
+    .status-building { background: rgba(52, 211, 153, 0.1); color: #34D399; }
+    .status-idea { background: rgba(255, 255, 255, 0.05); color: var(--text-dim); }
 
-    .card-list li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 12px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--grad);
-    }
-
-    .card-tags {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+    .tag-cloud {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 0.5rem;
+      margin-top: auto;
     }
 
     .tag {
-      font-size: 12px;
-      font-weight: 500;
-      padding: 4px 12px;
-      border-radius: var(--radius-pill);
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-2);
-    }
-
-    /* Sub-ventures */
-    .subs {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .sub {
-      padding: 20px;
-      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      padding: 0.35rem 0.75rem;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-dim);
     }
 
-    .sub-name {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
+    /* Founder Section */
+    .founder-split {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4rem;
+      align-items: center;
     }
 
-    .sub-name a,
-    a.card-name {
-      transition: opacity 0.2s;
+    @media (min-width: 768px) {
+      .founder-split { grid-template-columns: 1fr 1.2fr; }
     }
 
-    .sub-name a:hover,
-    a.card-name:hover {
-      opacity: 0.7;
+    .founder-image-wrapper {
+      position: relative;
     }
 
-    .sub-desc {
-      font-size: 14px;
-      color: var(--text-3);
-      line-height: 1.6;
+    .founder-image-outer {
+      padding: 0.75rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
     }
 
-    /* ---- Footer ---- */
+    .founder-image {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: calc(var(--radius-xl) - 0.75rem);
+      filter: grayscale(0.2);
+    }
+
+    .founder-content h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      margin-bottom: 2rem;
+    }
+
+    .founder-content p {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Footer */
     footer {
+      padding: 6rem 0 3rem;
       border-top: 1px solid var(--border);
-      padding: 40px 0;
     }
 
-    .footer-inner {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 32px;
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 4rem;
+      margin-bottom: 4rem;
     }
 
     .footer-brand img {
-      height: 22px;
-      width: auto;
-      display: block;
-      opacity: 0.6;
+      height: 24px;
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
     }
 
-    .footer-brand small {
-      display: block;
-      font-size: 14px;
-      color: var(--text-3);
-      margin-top: 8px;
+    .footer-brand p {
+      font-size: 0.875rem;
+      color: var(--text-dim);
     }
 
-    .footer-links {
-      display: flex;
-      gap: 48px;
-    }
-
-    .footer-col h4 {
-      font-size: 12px;
-      font-weight: 600;
+    .footer-links h4 {
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-3);
-      margin-bottom: 14px;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+      color: var(--text-dim);
     }
 
-    .footer-col a {
+    .footer-links a {
       display: block;
-      font-size: 14px;
-      color: var(--text-3);
-      margin-bottom: 10px;
-      transition: color 0.2s;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      transition: color 0.3s ease;
     }
 
-    .footer-col a:hover {
+    .footer-links a:hover {
       color: var(--text);
     }
 
     .footer-bottom {
-      margin-top: 32px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      font-size: 13px;
-      color: var(--text-3);
-      opacity: 0.5;
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
-      gap: 8px;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.75rem;
     }
 
-    .footer-bottom a {
-      color: inherit;
+    /* Animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      filter: blur(10px);
+      transition: all 1s var(--ease-fluid);
     }
 
-    .footer-bottom a:hover {
-      color: var(--text);
+    .reveal.active {
       opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
     }
 
-    /* ---- Modal ---- */
+    /* Modals */
     .modal-overlay {
-      display: none;
       position: fixed;
       inset: 0;
-      z-index: 200;
-      background: rgba(0, 0, 0, 0.7);
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      z-index: 2000;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s var(--ease-fluid);
     }
 
     .modal-overlay.open {
-      display: flex;
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    .modal {
-      background: var(--bg-2);
+    .modal-content {
+      background: var(--bg-accent);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--radius-lg);
       max-width: 600px;
       width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-      padding: 40px;
+      padding: 3rem;
       position: relative;
-      animation: modal-in 0.25s ease;
+      transform: translateY(20px);
+      transition: transform 0.5s var(--ease-fluid);
+    }
+
+    .modal-overlay.open .modal-content {
+      transform: translateY(0);
     }
 
     .modal-close {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255,255,255,0.05);
       border: none;
-      color: var(--text-3);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       cursor: pointer;
-      padding: 8px;
-      border-radius: 8px;
-      transition: background 0.2s, color 0.2s;
-      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .modal-close:hover {
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text);
+    /* Sub-ventures inside cards */
+    .sub-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
     }
 
-    .modal h3 {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 20px;
+    .sub-item {
+      padding: 1.25rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all 0.3s ease;
     }
 
-    .modal p {
-      color: var(--text-3);
-      margin-bottom: 14px;
-      font-size: 15px;
-      line-height: 1.7;
+    .sub-item:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: var(--border-light);
     }
 
-    .modal p:last-child {
-      margin-bottom: 0;
+    .sub-item h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
     }
 
-    .modal strong {
-      color: var(--text-2);
+    .sub-item p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
     }
 
-    .modal ul {
-      margin: 12px 0 16px;
-      padding-left: 20px;
-      list-style: disc;
-    }
-
-    .modal ul li {
-      color: var(--text-3);
-      font-size: 15px;
-      line-height: 1.7;
-      margin-bottom: 6px;
-    }
-
-    .modal a {
-      color: var(--blue);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-
-    .modal a:hover {
-      opacity: 0.8;
-    }
-
-    .modal .updated {
-      font-size: 12px;
-      color: var(--text-3);
-      opacity: 0.5;
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-
-    @keyframes modal-in {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* ---- Fade in ---- */
-    .fi {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .fi.v {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .fi-stagger>.fi:nth-child(1) {
-      transition-delay: 0s;
-    }
-
-    .fi-stagger>.fi:nth-child(2) {
-      transition-delay: 0.08s;
-    }
-
-    .fi-stagger>.fi:nth-child(3) {
-      transition-delay: 0.16s;
-    }
-
-    .hero h1 {
-      animation: up 0.7s ease both 0.05s;
-    }
-
-    .hero-sub {
-      animation: up 0.7s ease both 0.15s;
-    }
-
-    .hero-btns {
-      animation: up 0.7s ease both 0.25s;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      @keyframes up {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes drift-a {
-        0% {
-          transform: translate(0, 0);
-        }
-
-        100% {
-          transform: translate(40px, -30px);
-        }
-      }
-
-      @keyframes drift-b {
-        0% {
-          transform: translate(0, 0);
-        }
-
-        100% {
-          transform: translate(-30px, 20px);
-        }
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      .fi {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
-
-      .hero h1,
-      .hero-sub,
-      .hero-btns {
-        animation: none;
-        opacity: 1;
-      }
-
-      .hero-glow::before,
-      .hero-glow::after {
-        animation: none;
-      }
-    }
-
-    /* ---- Responsive ---- */
-    @media (min-width: 768px) {
-      .cards {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
-
-      .card-wide {
-        grid-column: 1 / -1;
-      }
-
-      .founder-grid {
-        grid-template-columns: 1fr 1.3fr;
-        gap: 56px;
-      }
-    }
-
-    @media (max-width: 767px) {
-      .nav-links-desktop {
-        display: none;
-      }
-
-      .stats {
-        flex-direction: column;
-        gap: 24px;
-      }
-
-      .footer-links {
-        gap: 32px;
-      }
+    .sub-item a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   </style>
 </head>
 
 <body>
+  <div class="noise"></div>
 
-  <header class="nav">
-    <nav class="nav-inner">
-      <a href="#" class="nav-brand"><img src="logo.png" alt="Seedwork"></a>
-      <div class="nav-right">
-        <a href="#intro" class="nav-links-desktop">About</a>
-        <a href="#ecosystem" class="nav-links-desktop">Ecosystem</a>
-        <a href="mailto:hello@seedwork.dk" class="nav-cta">Get in Touch</a>
+  <div class="nav-container">
+    <nav class="nav-island">
+      <a href="#" class="nav-logo">
+        <img src="logo.png" alt="Seedwork">
+      </a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#ecosystem">Ecosystem</a>
       </div>
+      <a href="mailto:hello@seedwork.dk" class="nav-cta">
+        Connect
+        <span class="icon-circle">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
     </nav>
-  </header>
+  </div>
 
   <main>
-
     <section class="hero" id="hero">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-glow" aria-hidden="true"></div>
-      <div class="hero-body">
-        <h1>I <span class="grad-text">test</span> ideas before I build them</h1>
-        <p class="hero-sub">Seedwork is how I run multiple business ideas at once. If something works, I go all in. If
-          it doesn't, I drop it and move on.</p>
-        <div class="hero-btns">
-          <a href="#ecosystem" class="btn btn-p">Explore the ecosystem</a>
-          <a href="#intro" class="btn btn-g">How we think</a>
-        </div>
+      <div class="mesh-glow">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
       </div>
-      <div class="scroll-arrow" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <polyline points="3,6 8,11 13,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </div>
-    </section>
-
-    <section class="intro" id="intro">
-      <div class="wrap">
-        <div class="intro-inner fi">
-          <span class="label grad-text">Philosophy</span>
-          <h2>Don't build stuff nobody wants.</h2>
-          <p>I'm a student. I don't have money to burn on ideas that might not work. So I don't. I test everything
-            first, will people actually pay for this? If yes, I build it. If no, I move on. Simple.</p>
-          <p>I'm studying electrical engineering at SDU in Sønderborg, and Seedwork is basically my way of running real
-            businesses while still in school. Every project here started as a question, not a product.</p>
-          <div class="stats">
-            <div>
-              <span class="stat-val">4+</span>
-              <span class="stat-lbl">Ideas in parallel</span>
-            </div>
-            <div>
-              <span class="stat-val">&lt;4w</span>
-              <span class="stat-lbl">Validation cycle</span>
-            </div>
-            <div>
-              <span class="stat-val">0</span>
-              <span class="stat-lbl">Wasted builds</span>
-            </div>
-          </div>
+      <div class="wrap hero-content">
+        <span class="eyebrow reveal">Venture Studio</span>
+        <h1 class="reveal">I <span class="serif grad-text">validate</span> ideas before I build them.</h1>
+        <p class="reveal">Seedwork is a parallel venture engine. We pressure-test business hypotheses against real markets. Only the survivors get built.</p>
+        <div class="reveal">
+          <a href="#ecosystem" class="btn-island">
+            Explore Ecosystem
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 12 12" fill="none">
+                <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="founder" id="founder">
+    <section id="about">
       <div class="wrap">
-        <div class="founder-grid fi">
-          <div class="founder-img">
-            <img src="pfp.jpeg" alt="Founder portrait">
+        <div class="founder-split">
+          <div class="founder-image-wrapper reveal">
+            <div class="founder-image-outer">
+              <img src="pfp.jpeg" alt="Barnabas Skoda" class="founder-image">
+            </div>
           </div>
-          <div>
-            <div class="founder-role grad-text">Founder</div>
-            <h2 class="founder-name">Barnabas Skoda</h2>
-            <p class="founder-bio">I'm an electrical engineering student at SDU. I like building things and figuring out
-              how businesses actually work. Seedwork is where I do both at the same time.</p>
-            <p class="founder-bio">I've got a few projects going right now, some are further along than others. The ones
-              on this page are the ones I'm most serious about.</p>
-            <ul class="founder-creds">
-              <li>Studying electrical engineering at SDU</li>
-              <li>Started BudGruppen, now building Grain</li>
-              <li>Sønderborg, Denmark</li>
-            </ul>
+          <div class="founder-content">
+            <span class="eyebrow reveal">The Philosophy</span>
+            <h2 class="reveal">Don't build stuff <span class="serif grad-text">nobody</span> wants.</h2>
+            <p class="reveal">I’m an electrical engineering student at SDU. Seedwork is my methodology for running real-world experiments while in school. Every project starts as a market question, not a product spec.</p>
+            <p class="reveal">If people pay, we scale. If they don't, we kill it in under 4 weeks. No wasted capital, no wasted time.</p>
+            <div class="tag-cloud reveal" style="margin-top: 2rem;">
+              <span class="tag">4+ Active Tests</span>
+              <span class="tag">&lt;4w Cycle</span>
+              <span class="tag">0 Wasted Builds</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="eco" id="ecosystem">
+    <section id="ecosystem">
       <div class="wrap">
-        <div class="eco-head fi">
-          <span class="label grad-text">Ecosystem</span>
-          <h2>What I'm working on</h2>
-          <p>Different stages, different industries. Same rule, test first, build later.</p>
+        <div style="text-align: center; margin-bottom: 4rem;">
+          <span class="eyebrow reveal">Portfolio</span>
+          <h2 class="reveal" style="font-size: 3.5rem;">The <span class="serif grad-text">Parallel</span> Pipeline</h2>
         </div>
-        <div class="cards fi-stagger">
 
-          <div class="card fi">
-            <div class="card-head">
-              <a href="https://getgrain.site" target="_blank" rel="noopener" class="card-name">Grain ↗</a>
-              <span class="card-status s-validating">Validating</span>
-            </div>
-            <p class="card-tagline">See what's real.</p>
-            <p class="card-desc">Browser extension that flags deepfakes and AI-generated content in your feed. Runs in
-              the background, no data collected. Chrome MVP in development.</p>
-            <div class="card-tags">
-              <span class="tag">AI Safety</span>
-              <span class="tag">Browser Extension</span>
-              <span class="tag">Consumer</span>
-            </div>
-          </div>
-
-          <div class="card fi">
-            <div class="card-head">
-              <span class="card-name">Core1000</span>
-              <span class="card-status s-idea">Idea</span>
-            </div>
-            <p class="card-tagline">Learn 1,000 words. Understand 80% of everyday conversation.</p>
-            <p class="card-desc">Language app that teaches the 1,000 most common words using spaced repetition. No
-              gamification, no streaks. Still in the idea phase.</p>
-            <div class="card-tags">
-              <span class="tag">Language Learning</span>
-              <span class="tag">SaaS</span>
-              <span class="tag">EdTech</span>
-            </div>
-          </div>
-
-          <div class="card card-wide fi">
-            <div class="card-head">
-              <span class="card-name">BudGruppen</span>
-              <span class="card-status s-building">Building</span>
-            </div>
-            <p class="card-tagline">Three ventures. One thesis: cut the middleman.</p>
-            <p class="card-desc">Three small businesses out of Sønderborg. Food delivery, ad-funded packaging, and snack
-              distribution.</p>
-            <div class="subs">
-              <div class="sub">
-                <div class="sub-name"><a href="https://budmedia.dk" target="_blank" rel="noopener">BudMedia ↗</a></div>
-                <p class="sub-desc">Free branded pizza boxes for restaurants. Ads printed on the box pay for it.</p>
-              </div>
-              <div class="sub">
-                <div class="sub-name"><a href="https://madbud.dk" target="_blank" rel="noopener">MadBud ↗</a></div>
-                <p class="sub-desc">Food delivery where the commission goes back to the customer. 7 DKK flat fee.</p>
-              </div>
-              <div class="sub">
-                <div class="sub-name">SnackBud</div>
-                <p class="sub-desc">Vending and snack distribution. Early stage.</p>
+        <div class="bento-grid">
+          <!-- Grain -->
+          <div class="bento-card bento-card-8 reveal">
+            <div class="bezel-outer">
+              <div class="bezel-inner">
+                <span class="card-label">AI Safety</span>
+                <div class="card-title">
+                  <a href="https://getgrain.site" target="_blank" style="color: inherit; text-decoration: none;">Grain</a>
+                  <span class="status-pill status-validating">Validating</span>
+                </div>
+                <p class="card-desc">A browser extension engineering truth. Identifying deepfakes and AI-generated content in real-time, preserving the integrity of your feed.</p>
+                <div class="tag-cloud">
+                  <span class="tag">Chrome MVP</span>
+                  <span class="tag">Privacy-First</span>
+                  <span class="tag">Consumer AI</span>
+                </div>
               </div>
             </div>
-            <div class="card-tags">
-              <span class="tag">Delivery</span>
-              <span class="tag">AdTech</span>
-              <span class="tag">Local Commerce</span>
+          </div>
+
+          <!-- Core1000 -->
+          <div class="bento-card bento-card-4 reveal">
+            <div class="bezel-outer">
+              <div class="bezel-inner">
+                <span class="card-label">EdTech</span>
+                <div class="card-title">
+                  Core1000
+                  <span class="status-pill status-idea">Idea</span>
+                </div>
+                <p class="card-desc">Mastering 80% of daily conversation through the 1,000 most vital words. Zero gamification. Pure retention.</p>
+                <div class="tag-cloud">
+                  <span class="tag">SaaS</span>
+                  <span class="tag">Spaced Repetition</span>
+                </div>
+              </div>
             </div>
           </div>
 
+          <!-- BudGruppen -->
+          <div class="bento-card bento-card-12 reveal">
+            <div class="bezel-outer">
+              <div class="bezel-inner" style="display: grid; grid-template-columns: 1fr; gap: 3rem;">
+                <div style="max-width: 500px;">
+                  <span class="card-label">Local Commerce</span>
+                  <div class="card-title">
+                    BudGruppen
+                    <span class="status-pill status-building">Building</span>
+                  </div>
+                  <p class="card-desc">A logistical ecosystem dismantling the middleman in Sønderborg. From ad-funded packaging to flat-fee delivery systems.</p>
+                  <div class="tag-cloud">
+                    <span class="tag">AdTech</span>
+                    <span class="tag">Logistics</span>
+                    <span class="tag">Hyper-Local</span>
+                  </div>
+                </div>
+                <div class="sub-grid">
+                  <div class="sub-item">
+                    <a href="https://budmedia.dk" target="_blank">
+                      <div>
+                        <h4>BudMedia</h4>
+                        <p>Ad-funded restaurant packaging. Ads pay for the box.</p>
+                      </div>
+                      <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                  </div>
+                  <div class="sub-item">
+                    <a href="https://madbud.dk" target="_blank">
+                      <div>
+                        <h4>MadBud</h4>
+                        <p>Food delivery with a 7 DKK flat fee. Returning value to diners.</p>
+                      </div>
+                      <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                  </div>
+                  <div class="sub-item">
+                    <div>
+                      <h4>SnackBud</h4>
+                      <p>Next-gen snack distribution. Vending reinvented.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
-
   </main>
 
   <footer>
     <div class="wrap">
-      <div class="footer-inner">
+      <div class="footer-grid">
         <div class="footer-brand">
           <img src="logo.png" alt="Seedwork">
-          <small>Test first. Build what works.</small>
+          <p>Validating tomorrow's ventures today.</p>
         </div>
         <div class="footer-links">
-          <div class="footer-col">
-            <h4>Company</h4>
-            <a href="#" data-modal="about">About</a>
-            <a href="#ecosystem">Ecosystem</a>
-            <a href="#" data-modal="contact">Contact</a>
-          </div>
-          <div class="footer-col">
-            <h4>Legal</h4>
-            <a href="#" data-modal="privacy">Privacy Policy</a>
-            <a href="#" data-modal="terms">Terms of Service</a>
-          </div>
+          <h4>Studio</h4>
+          <a href="#" data-modal="about">Our Story</a>
+          <a href="#ecosystem">Portfolio</a>
+          <a href="#" data-modal="contact">Inquiries</a>
+        </div>
+        <div class="footer-links">
+          <h4>Legal</h4>
+          <a href="#" data-modal="privacy">Privacy</a>
+          <a href="#" data-modal="terms">Terms</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>&copy; 2026 Seedwork · CVR 46232194</span>
-        <span><a href="#" data-modal="privacy">Privacy</a> &middot; <a href="#" data-modal="terms">Terms</a></span>
+        <span>&copy; 2026 Seedwork &middot; CVR 46232194 &middot; Sønderborg, DK</span>
+        <div style="display: flex; gap: 1rem;">
+          <a href="#" data-modal="privacy" style="color: inherit; text-decoration: none;">Privacy</a>
+          <a href="#" data-modal="terms" style="color: inherit; text-decoration: none;">Terms</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- About Modal -->
+  <!-- Modals -->
   <div class="modal-overlay" id="modal-about">
-    <div class="modal">
-      <button class="modal-close" aria-label="Close">&times;</button>
-      <h3>About Seedwork</h3>
-      <p>Seedwork is my umbrella for all the business ideas I'm testing and building. I'm Barnabas, an electrical
-        engineering student at SDU in Sønderborg, Denmark.</p>
-      <p>The idea is pretty simple, I run a few projects at the same time, figure out which ones people actually want,
-        and focus on those. Everything else gets shelved.</p>
-      <p>Right now I'm working on stuff in food delivery, ad tech, language learning, and AI. Not because I planned it
-        that way, but because those are the problems I kept running into.</p>
-      <p><strong>Seedwork</strong><br>CVR: 46232194<br>Sønderborg, Denmark</p>
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Our Story</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">Seedwork is a venture studio run by Barnabas Skoda, an electrical engineering student at SDU.</p>
+      <p style="color: var(--text-muted);">We operate on a simple thesis: the market knows best. We run parallel experiments to find friction and solve it. If an idea can't stand on its own within a month, we move to the next one.</p>
     </div>
   </div>
 
-  <!-- Contact Modal -->
   <div class="modal-overlay" id="modal-contact">
-    <div class="modal">
-      <button class="modal-close" aria-label="Close">&times;</button>
-      <h3>Get in Touch</h3>
-      <p>Want to chat, collaborate, or just ask about something? Shoot me an email.</p>
-      <p><strong>Email</strong><br><a href="mailto:hello@seedwork.dk">hello@seedwork.dk</a></p>
-      <p><strong>Location</strong><br>Sønderborg, Denmark</p>
-      <p><strong>Company</strong><br>Seedwork · CVR 46232194</p>
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Connect</h3>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">Interested in a venture or want to discuss a collaboration? Reach out directly.</p>
+      <a href="mailto:hello@seedwork.dk" style="color: var(--accent); font-weight: 600; font-size: 1.25rem; text-decoration: none;">hello@seedwork.dk</a>
     </div>
   </div>
 
-  <!-- Privacy Policy Modal -->
   <div class="modal-overlay" id="modal-privacy">
-    <div class="modal">
-      <button class="modal-close" aria-label="Close">&times;</button>
-      <h3>Privacy Policy</h3>
-      <p>This is the privacy policy for seedwork.dk. Short version: I don't collect anything.</p>
-      <p><strong>What I collect: nothing.</strong></p>
-      <p>This site has no cookies, no tracking pixels, no analytics. No Google Analytics, no Facebook Pixel, nothing
-        like that.</p>
-      <p>Specifically, I do <strong>not</strong> collect:</p>
-      <ul>
-        <li>Personal information (name, email, phone)</li>
-        <li>Usage data or browsing behavior</li>
-        <li>IP addresses or device information</li>
-        <li>Cookies or local storage data</li>
-        <li>Any form of analytics or telemetry</li>
-      </ul>
-      <p><strong>Third-party services</strong></p>
-      <p>This site loads fonts from Google Fonts. Google may collect limited technical data (such as IP address) when
-        serving font files. This is governed by <a href="https://policies.google.com/privacy" target="_blank"
-          rel="noopener">Google's Privacy Policy</a>. No other third-party services are used.</p>
-      <p><strong>Contact</strong></p>
-      <p>If you have questions, hit me up at <a href="mailto:hello@seedwork.dk">hello@seedwork.dk</a>.</p>
-      <p class="updated">Last updated: March 2026</p>
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Privacy</h3>
+      <p style="color: var(--text-muted);">We don't track you. No cookies, no analytics, no pixels. This site is purely informational.</p>
     </div>
   </div>
 
-  <!-- Terms of Service Modal -->
   <div class="modal-overlay" id="modal-terms">
-    <div class="modal">
-      <button class="modal-close" aria-label="Close">&times;</button>
-      <h3>Terms of Service</h3>
-      <p>These terms cover seedwork.dk, run by Seedwork (CVR 46232194) in Sønderborg, Denmark.</p>
-      <p><strong>Use of this site</strong></p>
-      <p>This is an informational site. It shows what I'm working on. There's no login, no account, no forms. Just a
-        website you can look at.</p>
-      <p><strong>Intellectual property</strong></p>
-      <p>Everything on this site, text, logos, design, belongs to Seedwork. Don't copy it without asking.</p>
-      <p><strong>External links</strong></p>
-      <p>There are links to other sites I run (budmedia.dk, madbud.dk, getgrain.site). Those have their own terms and
-        policies.</p>
-      <p><strong>No warranties</strong></p>
-      <p>Everything here is "as is." Plans change, projects evolve. What you see on this site reflects what I'm doing
-        right now, not a guarantee of what'll happen.</p>
-      <p><strong>Governing law</strong></p>
-      <p>Danish law applies. If there's ever a dispute, it gets handled in Danish courts.</p>
-      <p><strong>Contact</strong></p>
-      <p>Questions? <a href="mailto:hello@seedwork.dk">hello@seedwork.dk</a></p>
-      <p class="updated">Last updated: March 2026</p>
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Terms</h3>
+      <p style="color: var(--text-muted);">All content &copy; Seedwork 2026. Venture details are for informational purposes and subject to change based on market validation.</p>
     </div>
   </div>
 
   <script>
-    const q = s => document.querySelectorAll(s);
-    const mo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!mo) {
-      const o = new IntersectionObserver(es => {
-        es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); o.unobserve(e.target); } });
-      }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
-      q('.fi').forEach(el => o.observe(el));
-    } else {
-      q('.fi').forEach(el => el.classList.add('v'));
-    }
+    // Intersection Observer for Reveal Animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
 
-    /* Modals */
-    q('[data-modal]').forEach(btn => {
-      btn.addEventListener('click', e => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Modals
+    document.querySelectorAll('[data-modal]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const m = document.getElementById('modal-' + btn.dataset.modal);
-        if (m) { m.classList.add('open'); document.body.style.overflow = 'hidden'; }
+        const id = btn.getAttribute('data-modal');
+        document.getElementById(`modal-${id}`).classList.add('open');
+        document.body.style.overflow = 'hidden';
       });
     });
 
-    q('.modal-close').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.closest('.modal-overlay').classList.remove('open');
-        document.body.style.overflow = '';
+    document.querySelectorAll('.modal-close, .modal-overlay').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.target === el || el.classList.contains('modal-close')) {
+          document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+          document.body.style.overflow = '';
+        }
       });
     });
 
-    q('.modal-overlay').forEach(ov => {
-      ov.addEventListener('click', e => {
-        if (e.target === ov) { ov.classList.remove('open'); document.body.style.overflow = ''; }
-      });
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        q('.modal-overlay.open').forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
+    // Magnetic-ish Nav Effect
+    const nav = document.querySelector('.nav-island');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.style.padding = '0.4rem 0.4rem 0.4rem 1.25rem';
+        nav.style.background = 'rgba(10, 10, 11, 0.8)';
+      } else {
+        nav.style.padding = '0.5rem 0.5rem 0.5rem 1.5rem';
+        nav.style.background = 'rgba(10, 10, 11, 0.6)';
       }
     });
   </script>
-
 </body>
-
 </html>
