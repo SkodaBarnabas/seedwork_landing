@@ -7,34 +7,15 @@
   <title>Seedwork | Test first. Build what works.</title>
   <meta name="description"
     content="Seedwork is a Danish venture studio that runs ideas in parallel, validates them against real markets, and builds only what survives.">
-  <meta name="theme-color" content="#050505">
+  <meta name="theme-color" content="#000000">
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='white' stroke-width='1.5'/%3E%3Cpath d='M16 8L16 24M8 16L24 16' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E">
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg: #050505;
-      --bg-accent: #0A0A0B;
-      --text: #FFFFFF;
-      --text-muted: #A1A1AA;
-      --text-dim: #71717A;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-light: rgba(255, 255, 255, 0.12);
-      --accent: #4285F4;
-      --grad-primary: linear-gradient(135deg, #4285F4, #9333EA, #DB2777);
-      --font-sans: 'Plus Jakarta Sans', -apple-system, system-ui, sans-serif;
-      --font-serif: 'Instrument Serif', serif;
-      --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
-      --radius-xl: 2.5rem;
-      --radius-lg: 2rem;
-      --radius-md: 1.25rem;
-      --radius-sm: 0.75rem;
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
+  <style>
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -43,835 +24,474 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
+    :root {
+      --font-sans: 'Plus Jakarta Sans', -apple-system, system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+    }
+
     html {
-      scroll-behavior: smooth;
-      background: var(--bg);
+      background: #000;
     }
 
     body {
       font-family: var(--font-sans);
-      color: var(--text);
-      line-height: 1.6;
+      color: #fff;
+      background: #000;
       overflow-x: hidden;
-      background: var(--bg);
     }
 
-    /* Noise Overlay */
-    .noise {
+    /* ---- Video canvas ---- */
+    #frame-canvas {
       position: fixed;
-      inset: 0;
-      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      object-fit: cover;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.35);
       pointer-events: none;
-      opacity: 0.03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    /* Typography */
-    h1, h2, h3 {
+    /* ---- Scroll container ---- */
+    .scroll-container {
+      position: relative;
+      z-index: 2;
+      height: 450vh;
+    }
+
+    /* ---- Fixed logo ---- */
+    .logo {
+      position: fixed;
+      top: 2rem;
+      left: 2.5rem;
+      z-index: 10;
+      transition: opacity 0.4s ease;
+    }
+
+    .logo img {
+      height: 18px;
+      width: auto;
+      display: block;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      transition: none;
+    }
+
+    .section.active {
+      pointer-events: auto;
+    }
+
+    /* ---- Typography ---- */
+    .hero-text {
+      text-align: center;
+    }
+
+    .hero-text h1 {
+      font-family: var(--font-sans);
+      font-size: clamp(2.5rem, 6vw, 5rem);
       font-weight: 600;
+      letter-spacing: -0.03em;
       line-height: 1.1;
-      letter-spacing: -0.02em;
     }
 
-    .serif {
+    .hero-text h1 .serif {
       font-family: var(--font-serif);
       font-style: italic;
       font-weight: 400;
     }
 
-    .grad-text {
-      background: var(--grad-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* Container */
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
+    .philosophy-text {
+      text-align: center;
+      max-width: 700px;
       padding: 0 2rem;
     }
 
-    /* Fluid Island Nav */
-    .nav-container {
+    .philosophy-text p {
+      font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+      font-weight: 300;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .philosophy-text p .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* ---- Portfolio ---- */
+    .portfolio-item {
       position: fixed;
-      top: 1.5rem;
+      top: 0;
       left: 0;
-      right: 0;
-      z-index: 1000;
+      width: 100%;
+      height: 100vh;
       display: flex;
+      align-items: center;
       justify-content: center;
+      z-index: 3;
       pointer-events: none;
+      opacity: 0;
     }
 
-    .nav-island {
-      pointer-events: auto;
-      background: rgba(10, 10, 11, 0.6);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      padding: 0.5rem 0.5rem 0.5rem 1.5rem;
-      border-radius: 100px;
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      transition: all 0.5s var(--ease-fluid);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-
-    .nav-logo img {
-      height: 20px;
-      width: auto;
-      display: block;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--text);
-    }
-
-    .nav-cta {
-      background: var(--text);
-      color: var(--bg);
-      padding: 0.625rem 1.25rem;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 0.875rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s var(--ease-fluid);
-    }
-
-    .nav-cta:hover {
-      transform: scale(1.05);
-      background: #f0f0f0;
-    }
-
-    .nav-cta .icon-circle {
-      width: 20px;
-      height: 20px;
-      background: rgba(0,0,0,0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Sections */
-    section {
-      padding: 8rem 0;
-    }
-
-    .hero {
-      min-height: 100dvh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .venture {
       text-align: center;
-      position: relative;
-      overflow: hidden;
-      padding-top: 6rem;
     }
 
-    /* Mesh Gradients */
-    .mesh-glow {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    .glow-1 {
-      position: absolute;
-      top: -10%;
-      left: 10%;
-      width: 60%;
-      height: 60%;
-      background: radial-gradient(circle, rgba(66, 133, 244, 0.15) 0%, transparent 70%);
-      filter: blur(100px);
-      animation: drift 20s infinite alternate;
-    }
-
-    .glow-2 {
-      position: absolute;
-      bottom: -10%;
-      right: 10%;
-      width: 50%;
-      height: 50%;
-      background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 70%);
-      filter: blur(80px);
-      animation: drift 15s infinite alternate-reverse;
-    }
-
-    @keyframes drift {
-      from { transform: translate(0, 0) scale(1); }
-      to { transform: translate(5%, 5%) scale(1.1); }
-    }
-
-    .hero-content {
-      max-width: 900px;
-      z-index: 1;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      padding: 0.35rem 0.85rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      font-size: 0.65rem;
+    .venture-name {
+      font-size: clamp(2rem, 5vw, 4rem);
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      margin-bottom: 2rem;
-      color: var(--text-muted);
-    }
-
-    .hero h1 {
-      font-size: clamp(3rem, 8vw, 6rem);
-      margin-bottom: 1.5rem;
-      line-height: 1;
-    }
-
-    .hero p {
-      font-size: clamp(1.125rem, 2.5vw, 1.375rem);
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 3rem;
-    }
-
-    /* CTA Button Architecture */
-    .btn-island {
-      background: var(--text);
-      color: var(--bg);
-      padding: 0.875rem 0.875rem 0.875rem 2rem;
-      border-radius: 100px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 1.5rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
       text-decoration: none;
-      transition: all 0.5s var(--ease-fluid);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      color: #fff;
+      display: inline-block;
     }
 
-    .btn-island:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    a.venture-name:hover {
+      opacity: 0.7;
     }
 
-    .btn-island .btn-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(0,0,0,0.08);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.5s var(--ease-fluid);
-    }
-
-    .btn-island:hover .btn-icon {
-      background: rgba(0,0,0,1);
-      color: white;
-      transform: rotate(45deg);
-    }
-
-    /* Double Bezel Architecture */
-    .bezel-outer {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
-      padding: 0.5rem;
-      border-radius: var(--radius-xl);
-      height: 100%;
-      transition: all 0.5s var(--ease-fluid);
-    }
-
-    .bezel-inner {
-      background: var(--bg-accent);
-      border-radius: calc(var(--radius-xl) - 0.5rem);
-      padding: 2.5rem;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.03);
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
-    }
-
-    .bezel-outer:hover {
-      border-color: var(--border-light);
-      background: rgba(255, 255, 255, 0.05);
-      transform: translateY(-4px);
-    }
-
-    /* Bento Grid */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 1.5rem;
-      margin-top: 4rem;
-    }
-
-    .bento-card {
-      grid-column: span 12;
-    }
-
-    @media (min-width: 768px) {
-      .bento-card-8 { grid-column: span 8; }
-      .bento-card-4 { grid-column: span 4; }
-      .bento-card-6 { grid-column: span 6; }
-    }
-
-    .card-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--text-dim);
+    .venture-desc {
+      font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.6);
       margin-bottom: 1rem;
-      display: block;
-    }
-
-    .card-title {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .card-desc {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 2rem;
+      letter-spacing: 0.01em;
     }
 
     .status-pill {
-      padding: 0.25rem 0.75rem;
+      display: inline-block;
+      padding: 0.3rem 0.85rem;
       border-radius: 100px;
       font-size: 0.65rem;
-      font-weight: 700;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
     }
 
-    .status-validating { background: rgba(251, 191, 36, 0.1); color: #FBBF24; }
-    .status-building { background: rgba(52, 211, 153, 0.1); color: #34D399; }
-    .status-idea { background: rgba(255, 255, 255, 0.05); color: var(--text-dim); }
-
-    .tag-cloud {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: auto;
+    .status-validating {
+      background: rgba(251, 191, 36, 0.12);
+      color: #FBBF24;
     }
 
-    .tag {
-      font-size: 0.7rem;
-      padding: 0.35rem 0.75rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text-dim);
+    .status-idea {
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Founder Section */
-    .founder-split {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 4rem;
-      align-items: center;
+    .status-building {
+      background: rgba(52, 211, 153, 0.12);
+      color: #34D399;
     }
 
-    @media (min-width: 768px) {
-      .founder-split { grid-template-columns: 1fr 1.2fr; }
-    }
-
-    .founder-image-wrapper {
-      position: relative;
-    }
-
-    .founder-image-outer {
-      padding: 0.75rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-    }
-
-    .founder-image {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: calc(var(--radius-xl) - 0.75rem);
-      filter: grayscale(0.2);
-    }
-
-    .founder-content h2 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      margin-bottom: 2rem;
-    }
-
-    .founder-content p {
-      color: var(--text-muted);
-      font-size: 1.125rem;
-      margin-bottom: 1.5rem;
-    }
-
-    /* Footer */
-    footer {
-      padding: 6rem 0 3rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 4rem;
-      margin-bottom: 4rem;
-    }
-
-    .footer-brand img {
-      height: 24px;
-      margin-bottom: 1.5rem;
-      opacity: 0.8;
-    }
-
-    .footer-brand p {
-      font-size: 0.875rem;
-      color: var(--text-dim);
-    }
-
-    .footer-links h4 {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 1.5rem;
-      color: var(--text-dim);
-    }
-
-    .footer-links a {
-      display: block;
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      margin-bottom: 0.75rem;
-      transition: color 0.3s ease;
-    }
-
-    .footer-links a:hover {
-      color: var(--text);
-    }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
-      color: var(--text-dim);
-      font-size: 0.75rem;
-    }
-
-    /* Animations */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      filter: blur(10px);
-      transition: all 1s var(--ease-fluid);
-    }
-
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
-    }
-
-    /* Modals */
-    .modal-overlay {
+    /* ---- Footer section ---- */
+    .footer-section {
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(32px);
-      -webkit-backdrop-filter: blur(32px);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      opacity: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 3;
       pointer-events: none;
-      transition: opacity 0.5s var(--ease-fluid);
+      opacity: 0;
+      padding: 2.5rem;
     }
 
-    .modal-overlay.open {
-      opacity: 1;
+    .footer-section.active {
       pointer-events: auto;
     }
 
-    .modal-content {
-      background: var(--bg-accent);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      max-width: 600px;
-      width: 100%;
-      padding: 3rem;
-      position: relative;
-      transform: translateY(20px);
-      transition: transform 0.5s var(--ease-fluid);
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
     }
 
-    .modal-overlay.open .modal-content {
-      transform: translateY(0);
+    .footer-left img {
+      height: 16px;
+      margin-bottom: 0.75rem;
+      display: block;
+      opacity: 0.7;
     }
 
-    .modal-close {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: rgba(255,255,255,0.05);
-      border: none;
-      color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
+    .footer-left a,
+    .footer-left span {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      display: block;
+      line-height: 1.6;
+    }
+
+    .footer-left a:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-right {
+      text-align: right;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.3);
+      line-height: 1.6;
+    }
+
+    /* ---- Loading ---- */
+    .loader {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #000;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: opacity 0.6s ease;
     }
 
-    /* Sub-ventures inside cards */
-    .sub-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+    .loader.done {
+      opacity: 0;
+      pointer-events: none;
     }
 
-    .sub-item {
-      padding: 1.25rem;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      transition: all 0.3s ease;
+    .loader-text {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.05em;
     }
 
-    .sub-item:hover {
-      background: rgba(255,255,255,0.04);
-      border-color: var(--border-light);
-    }
+    /* ---- Mobile ---- */
+    @media (max-width: 768px) {
+      .logo {
+        top: 1.5rem;
+        left: 1.5rem;
+      }
 
-    .sub-item h4 {
-      font-size: 0.95rem;
-      margin-bottom: 0.25rem;
-    }
+      .footer-section {
+        padding: 1.5rem;
+      }
 
-    .sub-item p {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-    }
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+      }
 
-    .sub-item a {
-      color: inherit;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      .footer-right {
+        text-align: left;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="noise"></div>
+  <!-- Loading screen -->
+  <div class="loader" id="loader">
+    <span class="loader-text">Loading</span>
+  </div>
 
-  <div class="nav-container">
-    <nav class="nav-island">
-      <a href="#" class="nav-logo">
+  <!-- Video canvas -->
+  <canvas id="frame-canvas"></canvas>
+  <div class="overlay"></div>
+
+  <!-- Fixed logo -->
+  <div class="logo" id="logo">
+    <img src="logo.png" alt="Seedwork">
+  </div>
+
+  <!-- Scroll spacer -->
+  <div class="scroll-container"></div>
+
+  <!-- Section 1: Hero -->
+  <div class="section" id="sec-hero">
+    <div class="hero-text">
+      <h1>Test <span class="serif">first.</span><br>Build what works.</h1>
+    </div>
+  </div>
+
+  <!-- Section 2: Philosophy -->
+  <div class="section" id="sec-philosophy">
+    <div class="philosophy-text">
+      <p>I run ideas in <span class="serif">parallel.</span><br>Kill the ones that don't sell.</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Portfolio — Grain -->
+  <div class="portfolio-item" id="sec-grain">
+    <div class="venture">
+      <a href="https://getgrain.site" target="_blank" class="venture-name">Grain</a>
+      <p class="venture-desc">AI deepfake detection</p>
+      <span class="status-pill status-validating">Validating</span>
+    </div>
+  </div>
+
+  <!-- Section 3: Portfolio — Core1000 -->
+  <div class="portfolio-item" id="sec-core">
+    <div class="venture">
+      <span class="venture-name">Core1000</span>
+      <p class="venture-desc">Frequency-based language learning</p>
+      <span class="status-pill status-idea">Idea</span>
+    </div>
+  </div>
+
+  <!-- Section 3: Portfolio — BudGruppen -->
+  <div class="portfolio-item" id="sec-bud">
+    <div class="venture">
+      <span class="venture-name">BudGruppen</span>
+      <p class="venture-desc">Local commerce infrastructure</p>
+      <span class="status-pill status-building">Building</span>
+    </div>
+  </div>
+
+  <!-- Section 4: Footer -->
+  <div class="footer-section" id="sec-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
         <img src="logo.png" alt="Seedwork">
-      </a>
-      <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#ecosystem">Ecosystem</a>
+        <a href="mailto:hello@seedwork.dk">hello@seedwork.dk</a>
       </div>
-      <a href="mailto:hello@seedwork.dk" class="nav-cta">
-        Connect
-        <span class="icon-circle">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
-      </a>
-    </nav>
-  </div>
-
-  <main>
-    <section class="hero" id="hero">
-      <div class="mesh-glow">
-        <div class="glow-1"></div>
-        <div class="glow-2"></div>
+      <div class="footer-right">
+        <span>&copy; 2026 Seedwork</span><br>
+        <span>CVR 46232194 &middot; Sønderborg, DK</span>
       </div>
-      <div class="wrap hero-content">
-        <span class="eyebrow reveal">Venture Studio</span>
-        <h1 class="reveal">I <span class="serif grad-text">validate</span> ideas before I build them.</h1>
-        <p class="reveal">Seedwork is a parallel venture engine. We pressure-test business hypotheses against real markets. Only the survivors get built.</p>
-        <div class="reveal">
-          <a href="#ecosystem" class="btn-island">
-            Explore Ecosystem
-            <span class="btn-icon">
-              <svg width="18" height="18" viewBox="0 0 12 12" fill="none">
-                <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section id="about">
-      <div class="wrap">
-        <div class="founder-split">
-          <div class="founder-image-wrapper reveal">
-            <div class="founder-image-outer">
-              <img src="pfp.jpeg" alt="Barnabas Skoda" class="founder-image">
-            </div>
-          </div>
-          <div class="founder-content">
-            <span class="eyebrow reveal">The Philosophy</span>
-            <h2 class="reveal">Don't build stuff <span class="serif grad-text">nobody</span> wants.</h2>
-            <p class="reveal">I’m an electrical engineering student at SDU. Seedwork is my methodology for running real-world experiments while in school. Every project starts as a market question, not a product spec.</p>
-            <p class="reveal">If people pay, we scale. If they don't, we kill it in under 4 weeks. No wasted capital, no wasted time.</p>
-            <div class="tag-cloud reveal" style="margin-top: 2rem;">
-              <span class="tag">4+ Active Tests</span>
-              <span class="tag">&lt;4w Cycle</span>
-              <span class="tag">0 Wasted Builds</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="ecosystem">
-      <div class="wrap">
-        <div style="text-align: center; margin-bottom: 4rem;">
-          <span class="eyebrow reveal">Portfolio</span>
-          <h2 class="reveal" style="font-size: 3.5rem;">The <span class="serif grad-text">Parallel</span> Pipeline</h2>
-        </div>
-
-        <div class="bento-grid">
-          <!-- Grain -->
-          <div class="bento-card bento-card-8 reveal">
-            <div class="bezel-outer">
-              <div class="bezel-inner">
-                <span class="card-label">AI Safety</span>
-                <div class="card-title">
-                  <a href="https://getgrain.site" target="_blank" style="color: inherit; text-decoration: none;">Grain</a>
-                  <span class="status-pill status-validating">Validating</span>
-                </div>
-                <p class="card-desc">A browser extension engineering truth. Identifying deepfakes and AI-generated content in real-time, preserving the integrity of your feed.</p>
-                <div class="tag-cloud">
-                  <span class="tag">Chrome MVP</span>
-                  <span class="tag">Privacy-First</span>
-                  <span class="tag">Consumer AI</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Core1000 -->
-          <div class="bento-card bento-card-4 reveal">
-            <div class="bezel-outer">
-              <div class="bezel-inner">
-                <span class="card-label">EdTech</span>
-                <div class="card-title">
-                  Core1000
-                  <span class="status-pill status-idea">Idea</span>
-                </div>
-                <p class="card-desc">Mastering 80% of daily conversation through the 1,000 most vital words. Zero gamification. Pure retention.</p>
-                <div class="tag-cloud">
-                  <span class="tag">SaaS</span>
-                  <span class="tag">Spaced Repetition</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- BudGruppen -->
-          <div class="bento-card bento-card-12 reveal">
-            <div class="bezel-outer">
-              <div class="bezel-inner" style="display: grid; grid-template-columns: 1fr; gap: 3rem;">
-                <div style="max-width: 500px;">
-                  <span class="card-label">Local Commerce</span>
-                  <div class="card-title">
-                    BudGruppen
-                    <span class="status-pill status-building">Building</span>
-                  </div>
-                  <p class="card-desc">A logistical ecosystem dismantling the middleman in Sønderborg. From ad-funded packaging to flat-fee delivery systems.</p>
-                  <div class="tag-cloud">
-                    <span class="tag">AdTech</span>
-                    <span class="tag">Logistics</span>
-                    <span class="tag">Hyper-Local</span>
-                  </div>
-                </div>
-                <div class="sub-grid">
-                  <div class="sub-item">
-                    <a href="https://budmedia.dk" target="_blank">
-                      <div>
-                        <h4>BudMedia</h4>
-                        <p>Ad-funded restaurant packaging. Ads pay for the box.</p>
-                      </div>
-                      <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                  </div>
-                  <div class="sub-item">
-                    <a href="https://madbud.dk" target="_blank">
-                      <div>
-                        <h4>MadBud</h4>
-                        <p>Food delivery with a 7 DKK flat fee. Returning value to diners.</p>
-                      </div>
-                      <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                  </div>
-                  <div class="sub-item">
-                    <div>
-                      <h4>SnackBud</h4>
-                      <p>Next-gen snack distribution. Vending reinvented.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <img src="logo.png" alt="Seedwork">
-          <p>Validating tomorrow's ventures today.</p>
-        </div>
-        <div class="footer-links">
-          <h4>Studio</h4>
-          <a href="#" data-modal="about">Our Story</a>
-          <a href="#ecosystem">Portfolio</a>
-          <a href="#" data-modal="contact">Inquiries</a>
-        </div>
-        <div class="footer-links">
-          <h4>Legal</h4>
-          <a href="#" data-modal="privacy">Privacy</a>
-          <a href="#" data-modal="terms">Terms</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>&copy; 2026 Seedwork &middot; CVR 46232194 &middot; Sønderborg, DK</span>
-        <div style="display: flex; gap: 1rem;">
-          <a href="#" data-modal="privacy" style="color: inherit; text-decoration: none;">Privacy</a>
-          <a href="#" data-modal="terms" style="color: inherit; text-decoration: none;">Terms</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Modals -->
-  <div class="modal-overlay" id="modal-about">
-    <div class="modal-content">
-      <button class="modal-close">&times;</button>
-      <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Our Story</h3>
-      <p style="color: var(--text-muted); margin-bottom: 1rem;">Seedwork is a venture studio run by Barnabas Skoda, an electrical engineering student at SDU.</p>
-      <p style="color: var(--text-muted);">We operate on a simple thesis: the market knows best. We run parallel experiments to find friction and solve it. If an idea can't stand on its own within a month, we move to the next one.</p>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modal-contact">
-    <div class="modal-content">
-      <button class="modal-close">&times;</button>
-      <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Connect</h3>
-      <p style="color: var(--text-muted); margin-bottom: 2rem;">Interested in a venture or want to discuss a collaboration? Reach out directly.</p>
-      <a href="mailto:hello@seedwork.dk" style="color: var(--accent); font-weight: 600; font-size: 1.25rem; text-decoration: none;">hello@seedwork.dk</a>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modal-privacy">
-    <div class="modal-content">
-      <button class="modal-close">&times;</button>
-      <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Privacy</h3>
-      <p style="color: var(--text-muted);">We don't track you. No cookies, no analytics, no pixels. This site is purely informational.</p>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modal-terms">
-    <div class="modal-content">
-      <button class="modal-close">&times;</button>
-      <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Terms</h3>
-      <p style="color: var(--text-muted);">All content &copy; Seedwork 2026. Venture details are for informational purposes and subject to change based on market validation.</p>
     </div>
   </div>
 
   <script>
-    // Intersection Observer for Reveal Animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
+    const TOTAL_FRAMES = 61;
+    const FRAME_PATH = 'frames/frame_';
+    const frames = [];
+    let loaded = 0;
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
+    const canvas = document.getElementById('frame-canvas');
+    const ctx = canvas.getContext('2d');
+    const loader = document.getElementById('loader');
+
+    // Elements
+    const secHero = document.getElementById('sec-hero');
+    const secPhilosophy = document.getElementById('sec-philosophy');
+    const secGrain = document.getElementById('sec-grain');
+    const secCore = document.getElementById('sec-core');
+    const secBud = document.getElementById('sec-bud');
+    const secFooter = document.getElementById('sec-footer');
+    const logo = document.getElementById('logo');
+
+    // Resize canvas
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawFrame();
+    }
+    window.addEventListener('resize', resize);
+
+    // Preload frames
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = FRAME_PATH + String(i).padStart(3, '0') + '.jpg';
+      img.onload = () => {
+        loaded++;
+        if (loaded === TOTAL_FRAMES) {
+          resize();
+          loader.classList.add('done');
+          drawFrame();
+          onScroll();
         }
-      });
-    }, observerOptions);
+      };
+      frames.push(img);
+    }
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // Draw current frame to canvas (cover fit)
+    function drawFrame() {
+      const scrollMax = document.body.scrollHeight - window.innerHeight;
+      const progress = scrollMax > 0 ? window.scrollY / scrollMax : 0;
+      const index = Math.min(Math.floor(progress * (TOTAL_FRAMES - 1)), TOTAL_FRAMES - 1);
+      const img = frames[index];
+      if (!img || !img.complete) return;
 
-    // Modals
-    document.querySelectorAll('[data-modal]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = btn.getAttribute('data-modal');
-        document.getElementById(`modal-${id}`).classList.add('open');
-        document.body.style.overflow = 'hidden';
-      });
-    });
+      const cw = canvas.width;
+      const ch = canvas.height;
+      const iw = img.naturalWidth;
+      const ih = img.naturalHeight;
+      const scale = Math.max(cw / iw, ch / ih);
+      const dw = iw * scale;
+      const dh = ih * scale;
+      const dx = (cw - dw) / 2;
+      const dy = (ch - dh) / 2;
 
-    document.querySelectorAll('.modal-close, .modal-overlay').forEach(el => {
-      el.addEventListener('click', (e) => {
-        if (e.target === el || el.classList.contains('modal-close')) {
-          document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
-          document.body.style.overflow = '';
-        }
-      });
-    });
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(img, dx, dy, dw, dh);
+    }
 
-    // Magnetic-ish Nav Effect
-    const nav = document.querySelector('.nav-island');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        nav.style.padding = '0.4rem 0.4rem 0.4rem 1.25rem';
-        nav.style.background = 'rgba(10, 10, 11, 0.8)';
-      } else {
-        nav.style.padding = '0.5rem 0.5rem 0.5rem 1.5rem';
-        nav.style.background = 'rgba(10, 10, 11, 0.6)';
-      }
-    });
+    // Easing helper: smooth fade in/out within a range
+    function sectionOpacity(progress, start, end, fadeIn, fadeOut) {
+      if (progress < start || progress > end) return 0;
+      const local = (progress - start) / (end - start);
+      // Fade in during first fadeIn%, fade out during last fadeOut%
+      if (local < fadeIn) return local / fadeIn;
+      if (local > 1 - fadeOut) return (1 - local) / fadeOut;
+      return 1;
+    }
+
+    function onScroll() {
+      const scrollMax = document.body.scrollHeight - window.innerHeight;
+      const progress = scrollMax > 0 ? window.scrollY / scrollMax : 0;
+
+      drawFrame();
+
+      // Section 1: Hero (0–22% of scroll = 0–100vh)
+      const heroOp = sectionOpacity(progress, 0, 0.22, 0.01, 0.35);
+      secHero.style.opacity = heroOp;
+      secHero.classList.toggle('active', heroOp > 0);
+
+      // Section 2: Philosophy (22–44% = 100–200vh)
+      const philOp = sectionOpacity(progress, 0.22, 0.44, 0.3, 0.3);
+      secPhilosophy.style.opacity = philOp;
+      secPhilosophy.classList.toggle('active', philOp > 0);
+
+      // Section 3a: Grain (44–58%)
+      const grainOp = sectionOpacity(progress, 0.44, 0.58, 0.35, 0.35);
+      secGrain.style.opacity = grainOp;
+
+      // Section 3b: Core1000 (58–72%)
+      const coreOp = sectionOpacity(progress, 0.58, 0.72, 0.35, 0.35);
+      secCore.style.opacity = coreOp;
+
+      // Section 3c: BudGruppen (72–86%)
+      const budOp = sectionOpacity(progress, 0.72, 0.86, 0.35, 0.35);
+      secBud.style.opacity = budOp;
+
+      // Section 4: Footer (86–100%)
+      const footOp = sectionOpacity(progress, 0.86, 1.0, 0.3, 0);
+      secFooter.style.opacity = footOp;
+      secFooter.classList.toggle('active', footOp > 0);
+
+      // Logo fades slightly during transitions, stays visible
+      logo.style.opacity = Math.max(0.3, 1 - progress * 0.5);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('load', () => { resize(); onScroll(); });
   </script>
 </body>
 </html>
