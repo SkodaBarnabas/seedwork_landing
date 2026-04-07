@@ -5,15 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seedwork | Test first. Build what works.</title>
-  <meta name="description"
-    content="Seedwork is a Danish venture studio that runs ideas in parallel, validates them against real markets, and builds only what survives.">
+  <meta name="description" content="Seedwork is a Danish venture studio that runs ideas in parallel, validates them against real markets, and builds only what survives.">
   <meta name="theme-color" content="#000000">
-  <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='white' stroke-width='1.5'/%3E%3Cpath d='M16 8L16 24M8 16L24 16' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='white' stroke-width='1.5'/%3E%3Cpath d='M16 8L16 24M8 16L24 16' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after {
@@ -25,248 +23,37 @@
     }
 
     :root {
-      --font-sans: 'Plus Jakarta Sans', -apple-system, system-ui, sans-serif;
-      --font-serif: 'Instrument Serif', serif;
+      --sans: 'Plus Jakarta Sans', -apple-system, system-ui, sans-serif;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --ease: cubic-bezier(0.32, 0.72, 0, 1);
     }
 
     html {
-      background: #000;
+      background: #050505;
     }
 
     body {
-      font-family: var(--font-sans);
+      font-family: var(--sans);
       color: #fff;
-      background: #000;
+      background: #050505;
       overflow-x: hidden;
     }
 
-    /* ---- Video canvas ---- */
-    #frame-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      object-fit: cover;
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      background: rgba(0, 0, 0, 0.35);
-      pointer-events: none;
-    }
-
-    /* ---- Scroll container ---- */
-    .scroll-container {
-      position: relative;
-      z-index: 2;
-      height: 450vh;
-    }
-
-    /* ---- Fixed logo ---- */
-    .logo {
-      position: fixed;
-      top: 2rem;
-      left: 2.5rem;
-      z-index: 10;
-      transition: opacity 0.4s ease;
-    }
-
-    .logo img {
-      height: 18px;
-      width: auto;
-      display: block;
-    }
-
-    /* ---- Sections ---- */
-    .section {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-      transition: none;
-    }
-
-    .section.active {
-      pointer-events: auto;
-    }
-
-    /* ---- Typography ---- */
-    .hero-text {
-      text-align: center;
-    }
-
-    .hero-text h1 {
-      font-family: var(--font-sans);
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-    }
-
-    .hero-text h1 .serif {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-weight: 400;
-    }
-
-    .philosophy-text {
-      text-align: center;
-      max-width: 700px;
-      padding: 0 2rem;
-    }
-
-    .philosophy-text p {
-      font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-      font-weight: 300;
-      line-height: 1.35;
-      letter-spacing: -0.01em;
-    }
-
-    .philosophy-text p .serif {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-weight: 400;
-    }
-
-    /* ---- Portfolio ---- */
-    .portfolio-item {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    .venture {
-      text-align: center;
-    }
-
-    .venture-name {
-      font-size: clamp(2rem, 5vw, 4rem);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.5rem;
-      text-decoration: none;
-      color: #fff;
-      display: inline-block;
-    }
-
-    a.venture-name:hover {
-      opacity: 0.7;
-    }
-
-    .venture-desc {
-      font-size: clamp(0.9rem, 1.5vw, 1.1rem);
-      font-weight: 300;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 1rem;
-      letter-spacing: 0.01em;
-    }
-
-    .status-pill {
-      display: inline-block;
-      padding: 0.3rem 0.85rem;
-      border-radius: 100px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .status-validating {
-      background: rgba(251, 191, 36, 0.12);
-      color: #FBBF24;
-    }
-
-    .status-idea {
-      background: rgba(255, 255, 255, 0.06);
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .status-building {
-      background: rgba(52, 211, 153, 0.12);
-      color: #34D399;
-    }
-
-    /* ---- Footer section ---- */
-    .footer-section {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-      padding: 2.5rem;
-    }
-
-    .footer-section.active {
-      pointer-events: auto;
-    }
-
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-
-    .footer-left img {
-      height: 16px;
-      margin-bottom: 0.75rem;
-      display: block;
-      opacity: 0.7;
-    }
-
-    .footer-left a,
-    .footer-left span {
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.4);
-      text-decoration: none;
-      display: block;
-      line-height: 1.6;
-    }
-
-    .footer-left a:hover {
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .footer-right {
-      text-align: right;
-      font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.3);
-      line-height: 1.6;
-    }
-
-    /* ---- Loading ---- */
+    /* ═══════════════════════════════════════
+       LOADER
+       ═══════════════════════════════════════ */
     .loader {
       position: fixed;
       inset: 0;
-      z-index: 100;
-      background: #000;
+      z-index: 200;
+      background: #050505;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.6s ease;
+      gap: 2rem;
+      will-change: opacity;
+      transition: opacity 0.8s var(--ease);
     }
 
     .loader.done {
@@ -274,224 +61,557 @@
       pointer-events: none;
     }
 
-    .loader-text {
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 0.05em;
+    .loader-logo {
+      height: 32px;
+      opacity: 0.6;
     }
 
-    /* ---- Mobile ---- */
+    .loader-bar-track {
+      width: 120px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .loader-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 2px;
+      transition: width 0.3s var(--ease);
+    }
+
+    /* ═══════════════════════════════════════
+       VIDEO CANVAS — fixed fullscreen
+       ═══════════════════════════════════════ */
+    #vc {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      will-change: contents;
+    }
+
+    .scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════
+       SCROLL SPACER — creates scroll runway
+       ═══════════════════════════════════════ */
+    .runway {
+      position: relative;
+      z-index: 2;
+      height: 500vh;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════
+       FIXED LOGO — top-left
+       ═══════════════════════════════════════ */
+    .mark {
+      position: fixed;
+      top: 2.5rem;
+      left: 3rem;
+      z-index: 50;
+      will-change: opacity;
+    }
+
+    .mark img {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
+
+    /* ═══════════════════════════════════════
+       CONTENT SECTIONS — fixed, centered
+       All visibility driven by transform + opacity
+       ═══════════════════════════════════════ */
+    .panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    .panel--footer {
+      align-items: flex-end;
+      padding-bottom: 3.5rem;
+    }
+
+    /* ═══════════════════════════════════════
+       TYPOGRAPHY
+       ═══════════════════════════════════════ */
+    .t-hero {
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .t-hero h1 {
+      font-family: var(--sans);
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+    }
+
+    .t-hero h1 .i {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .t-phil {
+      text-align: center;
+      max-width: 780px;
+      padding: 0 2rem;
+    }
+
+    .t-phil p {
+      font-size: clamp(1.6rem, 3.8vw, 2.8rem);
+      font-weight: 300;
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .t-phil p .i {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* ═══════════════════════════════════════
+       VENTURES
+       ═══════════════════════════════════════ */
+    .v {
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .v-name {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    a.v-name {
+      transition: opacity 0.5s var(--ease);
+    }
+
+    a.v-name:hover {
+      opacity: 0.65;
+    }
+
+    .v-desc {
+      font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.005em;
+      margin-bottom: 1.25rem;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .pill--val  { background: rgba(251, 191, 36, 0.1); color: #FBBF24; }
+    .pill--idea { background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.35); }
+    .pill--bld  { background: rgba(52, 211, 153, 0.1); color: #34D399; }
+
+    /* Venture sub-links */
+    .v-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .v-link {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.35);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.4s var(--ease);
+    }
+
+    .v-link:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════ */
+    .ft {
+      width: 100%;
+      padding: 0 3rem;
+    }
+
+    .ft-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .ft-left img {
+      height: 22px;
+      display: block;
+      margin-bottom: 0.75rem;
+      opacity: 0.5;
+    }
+
+    .ft-left a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.35);
+      text-decoration: none;
+      transition: color 0.4s var(--ease);
+    }
+
+    .ft-left a:hover {
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .ft-right {
+      text-align: right;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.2);
+      line-height: 1.7;
+    }
+
+    /* ═══════════════════════════════════════
+       NOISE OVERLAY (fixed, pointer-events none)
+       ═══════════════════════════════════════ */
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ═══════════════════════════════════════
+       MOBILE
+       ═══════════════════════════════════════ */
     @media (max-width: 768px) {
-      .logo {
+      .mark {
         top: 1.5rem;
         left: 1.5rem;
       }
 
-      .footer-section {
-        padding: 1.5rem;
+      .mark img {
+        height: 22px;
       }
 
-      .footer-inner {
+      .ft {
+        padding: 0 1.5rem;
+      }
+
+      .ft-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1.5rem;
+        gap: 1.25rem;
       }
 
-      .footer-right {
+      .ft-right {
         text-align: left;
+      }
+
+      .panel--footer {
+        padding-bottom: 2.5rem;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- Loading screen -->
+  <!-- Noise — fixed, on top of everything, pointer-events off -->
+  <div class="noise"></div>
+
+  <!-- Loader -->
   <div class="loader" id="loader">
-    <span class="loader-text">Loading</span>
+    <img src="logo.png" alt="Seedwork" class="loader-logo">
+    <div class="loader-bar-track">
+      <div class="loader-bar-fill" id="loader-fill"></div>
+    </div>
   </div>
 
   <!-- Video canvas -->
-  <canvas id="frame-canvas"></canvas>
-  <div class="overlay"></div>
+  <canvas id="vc"></canvas>
+  <div class="scrim"></div>
 
   <!-- Fixed logo -->
-  <div class="logo" id="logo">
+  <div class="mark" id="mark">
     <img src="logo.png" alt="Seedwork">
   </div>
 
-  <!-- Scroll spacer -->
-  <div class="scroll-container"></div>
+  <!-- Scroll runway (invisible spacer) -->
+  <div class="runway"></div>
 
   <!-- Section 1: Hero -->
-  <div class="section" id="sec-hero">
-    <div class="hero-text">
-      <h1>Test <span class="serif">first.</span><br>Build what works.</h1>
+  <div class="panel" id="p-hero">
+    <div class="t-hero">
+      <h1>Test <span class="i">first.</span><br>Build what works.</h1>
     </div>
   </div>
 
   <!-- Section 2: Philosophy -->
-  <div class="section" id="sec-philosophy">
-    <div class="philosophy-text">
-      <p>I run ideas in <span class="serif">parallel.</span><br>Kill the ones that don't sell.</p>
+  <div class="panel" id="p-phil">
+    <div class="t-phil">
+      <p>I run ideas in <span class="i">parallel.</span><br>Kill the ones that don't sell.</p>
     </div>
   </div>
 
-  <!-- Section 3: Portfolio — Grain -->
-  <div class="portfolio-item" id="sec-grain">
-    <div class="venture">
-      <a href="https://getgrain.site" target="_blank" class="venture-name">Grain</a>
-      <p class="venture-desc">AI deepfake detection</p>
-      <span class="status-pill status-validating">Validating</span>
+  <!-- Section 3a: Grain -->
+  <div class="panel" id="p-grain">
+    <div class="v">
+      <a href="https://getgrain.site" target="_blank" rel="noopener" class="v-name">Grain</a>
+      <p class="v-desc">AI deepfake detection</p>
+      <span class="pill pill--val">Validating</span>
     </div>
   </div>
 
-  <!-- Section 3: Portfolio — Core1000 -->
-  <div class="portfolio-item" id="sec-core">
-    <div class="venture">
-      <span class="venture-name">Core1000</span>
-      <p class="venture-desc">Frequency-based language learning</p>
-      <span class="status-pill status-idea">Idea</span>
+  <!-- Section 3b: Core1000 -->
+  <div class="panel" id="p-core">
+    <div class="v">
+      <span class="v-name">Core1000</span>
+      <p class="v-desc">Frequency-based language learning</p>
+      <span class="pill pill--idea">Idea</span>
     </div>
   </div>
 
-  <!-- Section 3: Portfolio — BudGruppen -->
-  <div class="portfolio-item" id="sec-bud">
-    <div class="venture">
-      <span class="venture-name">BudGruppen</span>
-      <p class="venture-desc">Local commerce infrastructure</p>
-      <span class="status-pill status-building">Building</span>
+  <!-- Section 3c: BudGruppen -->
+  <div class="panel" id="p-bud">
+    <div class="v">
+      <span class="v-name">BudGruppen</span>
+      <p class="v-desc">Local commerce infrastructure</p>
+      <span class="pill pill--bld">Building</span>
+      <div class="v-links">
+        <a href="https://budmedia.dk" target="_blank" rel="noopener" class="v-link">budmedia.dk</a>
+        <a href="https://madbud.dk" target="_blank" rel="noopener" class="v-link">madbud.dk</a>
+      </div>
     </div>
   </div>
 
   <!-- Section 4: Footer -->
-  <div class="footer-section" id="sec-footer">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <img src="logo.png" alt="Seedwork">
-        <a href="mailto:hello@seedwork.dk">hello@seedwork.dk</a>
-      </div>
-      <div class="footer-right">
-        <span>&copy; 2026 Seedwork</span><br>
-        <span>CVR 46232194 &middot; Sønderborg, DK</span>
+  <div class="panel panel--footer" id="p-foot">
+    <div class="ft">
+      <div class="ft-row">
+        <div class="ft-left">
+          <img src="logo.png" alt="Seedwork">
+          <a href="mailto:hello@seedwork.dk">hello@seedwork.dk</a>
+        </div>
+        <div class="ft-right">
+          &copy; 2026 Seedwork<br>
+          CVR 46232194 &middot; Sønderborg, DK
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    const TOTAL_FRAMES = 61;
-    const FRAME_PATH = 'frames/frame_';
-    const frames = [];
-    let loaded = 0;
+    /* ═══════════════════════════════════════
+       FRAME SEQUENCE ENGINE
+       ═══════════════════════════════════════
+       Single rAF loop. No scroll listeners.
+       Lerp-based interpolation for spring feel.
+       Canvas only redraws on frame index change.
+    */
 
-    const canvas = document.getElementById('frame-canvas');
-    const ctx = canvas.getContext('2d');
-    const loader = document.getElementById('loader');
+    const TOTAL = 121;
+    const imgs = new Array(TOTAL);
+    let loadCount = 0;
+    let ready = false;
 
-    // Elements
-    const secHero = document.getElementById('sec-hero');
-    const secPhilosophy = document.getElementById('sec-philosophy');
-    const secGrain = document.getElementById('sec-grain');
-    const secCore = document.getElementById('sec-core');
-    const secBud = document.getElementById('sec-bud');
-    const secFooter = document.getElementById('sec-footer');
-    const logo = document.getElementById('logo');
+    const canvas = document.getElementById('vc');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const loaderEl = document.getElementById('loader');
+    const loaderFill = document.getElementById('loader-fill');
 
-    // Resize canvas
+    // Panels
+    const mark = document.getElementById('mark');
+    const panels = {
+      hero:  document.getElementById('p-hero'),
+      phil:  document.getElementById('p-phil'),
+      grain: document.getElementById('p-grain'),
+      core:  document.getElementById('p-core'),
+      bud:   document.getElementById('p-bud'),
+      foot:  document.getElementById('p-foot'),
+    };
+
+    // ---- Resize ----
+    let cw, ch;
     function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      drawFrame();
+      cw = window.innerWidth;
+      ch = window.innerHeight;
+      canvas.width = cw;
+      canvas.height = ch;
     }
+    resize();
     window.addEventListener('resize', resize);
 
-    // Preload frames
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+    // ---- Preload frames ----
+    for (let i = 0; i < TOTAL; i++) {
       const img = new Image();
-      img.src = FRAME_PATH + String(i).padStart(3, '0') + '.jpg';
+      img.decoding = 'async';
+      img.src = 'frames/frame_' + String(i + 1).padStart(3, '0') + '.jpg';
       img.onload = () => {
-        loaded++;
-        if (loaded === TOTAL_FRAMES) {
-          resize();
-          loader.classList.add('done');
-          drawFrame();
-          onScroll();
+        loadCount++;
+        loaderFill.style.width = ((loadCount / TOTAL) * 100) + '%';
+        if (loadCount === TOTAL) {
+          ready = true;
+          loaderEl.classList.add('done');
         }
       };
-      frames.push(img);
+      imgs[i] = img;
     }
 
-    // Draw current frame to canvas (cover fit)
-    function drawFrame() {
-      const scrollMax = document.body.scrollHeight - window.innerHeight;
-      const progress = scrollMax > 0 ? window.scrollY / scrollMax : 0;
-      const index = Math.min(Math.floor(progress * (TOTAL_FRAMES - 1)), TOTAL_FRAMES - 1);
-      const img = frames[index];
+    // ---- Draw frame (cover-fit) ----
+    let lastIdx = -1;
+
+    function paint(idx) {
+      if (idx === lastIdx) return;
+      lastIdx = idx;
+      const img = imgs[idx];
       if (!img || !img.complete) return;
 
-      const cw = canvas.width;
-      const ch = canvas.height;
       const iw = img.naturalWidth;
       const ih = img.naturalHeight;
       const scale = Math.max(cw / iw, ch / ih);
       const dw = iw * scale;
       const dh = ih * scale;
-      const dx = (cw - dw) / 2;
-      const dy = (ch - dh) / 2;
 
-      ctx.clearRect(0, 0, cw, ch);
-      ctx.drawImage(img, dx, dy, dw, dh);
+      ctx.drawImage(img, (cw - dw) * 0.5, (ch - dh) * 0.5, dw, dh);
     }
 
-    // Easing helper: smooth fade in/out within a range
-    function sectionOpacity(progress, start, end, fadeIn, fadeOut) {
+    // ---- Smooth scroll tracking ----
+    let current = 0;     // interpolated progress 0..1
+    const LERP = 0.09;   // spring tension — lower = smoother, higher = snappier
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    // ---- Section opacity calculator ----
+    // Returns 0..1 with smooth fade-in/out zones
+    function fade(progress, start, end, fi, fo) {
       if (progress < start || progress > end) return 0;
-      const local = (progress - start) / (end - start);
-      // Fade in during first fadeIn%, fade out during last fadeOut%
-      if (local < fadeIn) return local / fadeIn;
-      if (local > 1 - fadeOut) return (1 - local) / fadeOut;
+      const t = (progress - start) / (end - start);
+      if (t < fi) return t / fi;
+      if (t > 1 - fo) return (1 - t) / fo;
       return 1;
     }
 
-    function onScroll() {
-      const scrollMax = document.body.scrollHeight - window.innerHeight;
-      const progress = scrollMax > 0 ? window.scrollY / scrollMax : 0;
-
-      drawFrame();
-
-      // Section 1: Hero (0–22% of scroll = 0–100vh)
-      const heroOp = sectionOpacity(progress, 0, 0.22, 0.01, 0.35);
-      secHero.style.opacity = heroOp;
-      secHero.classList.toggle('active', heroOp > 0);
-
-      // Section 2: Philosophy (22–44% = 100–200vh)
-      const philOp = sectionOpacity(progress, 0.22, 0.44, 0.3, 0.3);
-      secPhilosophy.style.opacity = philOp;
-      secPhilosophy.classList.toggle('active', philOp > 0);
-
-      // Section 3a: Grain (44–58%)
-      const grainOp = sectionOpacity(progress, 0.44, 0.58, 0.35, 0.35);
-      secGrain.style.opacity = grainOp;
-
-      // Section 3b: Core1000 (58–72%)
-      const coreOp = sectionOpacity(progress, 0.58, 0.72, 0.35, 0.35);
-      secCore.style.opacity = coreOp;
-
-      // Section 3c: BudGruppen (72–86%)
-      const budOp = sectionOpacity(progress, 0.72, 0.86, 0.35, 0.35);
-      secBud.style.opacity = budOp;
-
-      // Section 4: Footer (86–100%)
-      const footOp = sectionOpacity(progress, 0.86, 1.0, 0.3, 0);
-      secFooter.style.opacity = footOp;
-      secFooter.classList.toggle('active', footOp > 0);
-
-      // Logo fades slightly during transitions, stays visible
-      logo.style.opacity = Math.max(0.3, 1 - progress * 0.5);
+    // ---- Y-shift for parallax feel (small vertical drift) ----
+    function yShift(opacity) {
+      // When fading in, shift up from +20px; when fading out, shift to -20px
+      // At full opacity, 0 shift
+      return (1 - opacity) * 18;
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('load', () => { resize(); onScroll(); });
+    // ---- Main loop ----
+    function tick() {
+      if (!ready) {
+        requestAnimationFrame(tick);
+        return;
+      }
+
+      // Read scroll directly in rAF — no scroll event needed
+      const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+      const target = scrollMax > 0 ? window.scrollY / scrollMax : 0;
+
+      // Lerp toward target for buttery interpolation
+      current = lerp(current, target, LERP);
+
+      // Snap if close enough to avoid infinite micro-updates
+      if (Math.abs(current - target) < 0.0001) current = target;
+
+      // ---- Paint video frame ----
+      const frameIdx = Math.min(Math.round(current * (TOTAL - 1)), TOTAL - 1);
+      paint(frameIdx);
+
+      // ---- Update panel visibility ----
+      // GPU-only: transform + opacity
+
+      // Hero: 0–20%
+      const hO = fade(current, 0, 0.20, 0.001, 0.4);
+      panels.hero.style.opacity = hO;
+      panels.hero.style.transform = 'translate3d(0,' + (hO < 1 && current > 0.1 ? -yShift(hO) : 0) + 'px,0)';
+
+      // Philosophy: 20–42%
+      const pO = fade(current, 0.20, 0.42, 0.3, 0.3);
+      panels.phil.style.opacity = pO;
+      panels.phil.style.transform = 'translate3d(0,' + yShift(pO) + 'px,0)';
+
+      // Grain: 42–56%
+      const gO = fade(current, 0.42, 0.56, 0.35, 0.35);
+      panels.grain.style.opacity = gO;
+      panels.grain.style.transform = 'translate3d(0,' + yShift(gO) + 'px,0)';
+      panels.grain.style.pointerEvents = gO > 0.3 ? 'auto' : 'none';
+
+      // Core1000: 56–70%
+      const cO = fade(current, 0.56, 0.70, 0.35, 0.35);
+      panels.core.style.opacity = cO;
+      panels.core.style.transform = 'translate3d(0,' + yShift(cO) + 'px,0)';
+
+      // BudGruppen: 70–84%
+      const bO = fade(current, 0.70, 0.84, 0.35, 0.35);
+      panels.bud.style.opacity = bO;
+      panels.bud.style.transform = 'translate3d(0,' + yShift(bO) + 'px,0)';
+      panels.bud.style.pointerEvents = bO > 0.3 ? 'auto' : 'none';
+
+      // Footer: 84–100%
+      const fO = fade(current, 0.84, 1.0, 0.3, 0);
+      panels.foot.style.opacity = fO;
+      panels.foot.style.pointerEvents = fO > 0.3 ? 'auto' : 'none';
+
+      // Logo
+      mark.style.opacity = Math.max(0.25, 1 - current * 0.4);
+
+      requestAnimationFrame(tick);
+    }
+
+    // Paint first frame immediately when first image loads
+    imgs[0].onload = function() {
+      loadCount++;
+      loaderFill.style.width = ((loadCount / TOTAL) * 100) + '%';
+      resize();
+      paint(0);
+      if (loadCount === TOTAL) {
+        ready = true;
+        loaderEl.classList.add('done');
+      }
+    };
+
+    requestAnimationFrame(tick);
   </script>
 </body>
 </html>
